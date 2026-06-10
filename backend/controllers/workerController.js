@@ -1,4 +1,4 @@
-const Worker=require("../models/worker");
+const Worker=require("../models/Worker");
 
 const createWorker=async (req,res) =>{
     try{
@@ -56,7 +56,7 @@ const deleteWorker = async (req, res) => {
         if(!worker){
             return res.status(404).json({message: "Worker not found"})
         }
-        return res.status(200).json({message:"Visitor deleted successfully"});;
+        return res.status(200).json({message:"Worker deleted successfully"})
     } catch (error) {
         res.status(500).json({message: error.message});
     }

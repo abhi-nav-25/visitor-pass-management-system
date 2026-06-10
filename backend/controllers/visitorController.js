@@ -3,7 +3,7 @@ const Visitor=require("../models/Visitor");
 const getVisitors=async(req,res) => {
     try {
         const visitors = await Visitor.find();
-        res.json(visitors);
+        res.status(200).json(visitors);
     } catch (error) {
         res.status(500).json({
             message: error.message

@@ -13,6 +13,9 @@ app.use("/api/visitors", visitorRoutes);
 const workerRoutes = require("./routes/workerRoutes");
 app.use("/api/workers", workerRoutes);
 
+const passRoutes = require("./routes/passRoutes");
+app.use("/api/passes", passRoutes);
+
 app.listen(process.env.PORT || 5000, () => {
     console.log(`Server running on port ${process.env.PORT || 5000}`);
 });
