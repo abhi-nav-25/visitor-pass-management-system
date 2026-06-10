@@ -97,12 +97,10 @@ const verifyPass = async (req, res) => {
         if(!pass){
             return res.status(404).json({ message:"Entry Denied. Pass not found"})
         }
-        else{
-            if(pass.status=="active")
-                res.status(200).json({message:"Welcome!", pass })
-            else
+        if(pass.status==="active")
+                return res.status(200).json({message:"Welcome!", pass })
+        else
             return res.status(403).json({ message:"Entry Denied. Pass is not active"})
-        }
     } catch(error) {
         return res.status(500).json({
             message: error.message
