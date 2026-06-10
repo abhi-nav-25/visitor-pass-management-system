@@ -5,11 +5,13 @@ const {
     createPass,
     getPassById,
     updatePass,
-    deletePass
+    deletePass,
+    verifyPass
 } = require("../controllers/passController");
 
 router.get("/", getPasses);
 router.post("/", createPass);
+router.get("/verify/:id", verifyPass);
 router.get("/:id", getPassById);
 router.put("/:id", updatePass);
 router.delete("/:id", deletePass);

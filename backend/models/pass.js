@@ -17,6 +17,10 @@ const passSchema = new mongoose.Schema({
         ref: "Worker"
     },
 
+    qrCode: {
+        type: String
+    },
+
     issueDate: {
         type: Date,
         default: Date.now
