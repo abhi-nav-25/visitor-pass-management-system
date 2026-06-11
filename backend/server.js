@@ -19,6 +19,9 @@ app.use("/api/passes", passRoutes);
 const entryExitRoutes = require("./routes/entryExitRoutes");
 app.use("/api/logs", entryExitRoutes);
 
+const authRoutes = require("./routes/authRoutes");
+app.use("/api/auth", authRoutes);
+
 app.listen(process.env.PORT || 5000, () => {
     console.log(`Server running on port ${process.env.PORT || 5000}`);
 });
