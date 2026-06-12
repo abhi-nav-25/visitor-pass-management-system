@@ -18,7 +18,11 @@ const createPass = async (req, res) => {
             return res.status(400).json({message: "Invalid pass type"});
         }
         const pass=await Pass.create(req.body);
-        const qrCode = await QRCode.toDataURL(pass._id.toString());
+        const qrData = JSON.stringify({
+            passId: pass._id,
+            passType: pass.passType
+        });
+        const qrCode = await QRCode.toDataURL(qrData);
         pass.qrCode=qrCode;
         await pass.save();
 
@@ -108,11 +112,50 @@ const verifyPass = async (req, res) => {
     }
 };
 
+const getPassQR = async(req,res)=>{
+    try{
+        const pass = await Pass.findById(req.params.id);
+        if(!pass){
+            return res.status(404).json({message: "Pass not found"});
+        }
+        res.status(200).json({qrCode: pass.qrCode});
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+};
+
+const verifyQRCode = async (req, res) => {
+    try {
+        const { qrData } = req.body;
+        const data = JSON.parse(qrData);
+        const pass = await Pass.findById(data.passId)
+            .populate("visitor")
+            .populate("worker");
+        if (!pass) {
+            return res.status(404).json({message: "Entry Denied. Pass not found"});
+        }
+        if(data.passType !== pass.passType){
+            return res.status(403).json({message: "Invalid QR code"});
+        }
+        if (pass.status !== "active") {
+            return res.status(403).json({message: "Entry Denied. Pass is not active"});
+        }
+        if (new Date(pass.expiryDate) < new Date()) {
+            return res.status(403).json({message: "Entry Denied. Pass expired"});
+        }
+        res.status(200).json({message: "Welcome!",pass});
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+};
+
 module.exports = {
     createPass,
     getPasses,
     getPassById,
     updatePass,
     deletePass,
-    verifyPass
+    verifyPass,
+    getPassQR,
+    verifyQRCode
 };
