@@ -1,20 +1,26 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Visitors from "./pages/Visitors";
+import Workers from "./pages/Workers";
+import Passes from "./pages/Passes";
+import Logs from "./pages/Logs";
+import Reports from "./pages/Reports";
 
 function App() {
-  const [visitorCount, setVisitorCount] = useState(0);
-
   return (
-    <div>
-      <h1>Visitor Pass Management System</h1>
-
-      <h2>Total Visitors: {visitorCount}</h2>
-
-      <button
-        onClick={() => setVisitorCount(visitorCount + 1)}
-      >
-        Add Visitor
-      </button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/visitors" element={<Visitors />} />
+        <Route path="/workers" element={<Workers />} />
+        <Route path="/passes" element={<Passes />} />
+        <Route path="/logs" element={<Logs />} />
+        <Route path="/reports" element={<Reports />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
