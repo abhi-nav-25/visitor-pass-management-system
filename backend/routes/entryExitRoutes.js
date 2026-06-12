@@ -6,10 +6,11 @@ const {
     getAllLogs,
     getCurrentlyInside
 } = require("../controllers/entryExitController");
+const { protect, authorize } = require("../middleware/authMiddleware");
 
+router.post("/entry/:passId",protect,authorize("admin", "security"),entryPerson);
+router.post("/exit/:passId",protect,authorize("admin", "security"),exitPerson);
+router.get("/",protect,authorize("admin", "reports"),getAllLogs);
+router.get("/inside",protect,authorize("admin", "reports", "security"),getCurrentlyInside);
 
-router.post("/entry/:passId", entryPerson);
-router.post("/exit/:passId", exitPerson);
-router.get("/", getAllLogs);
-router.get("/inside", getCurrentlyInside);
 module.exports = router;

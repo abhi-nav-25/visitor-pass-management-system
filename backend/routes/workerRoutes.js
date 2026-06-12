@@ -7,10 +7,12 @@ const {
     updateWorker,
     deleteWorker
 } = require("../controllers/workerController");
+const { protect, authorize } = require("../middleware/authMiddleware");
 
-router.get("/", getWorkers);
-router.post("/", createWorker);
-router.get("/:id", getWorkerById);
-router.put("/:id", updateWorker);
-router.delete("/:id", deleteWorker);
+router.get("/",protect,authorize("admin", "reports"),getWorkers);
+router.post("/",protect,authorize("admin", "receptionist"),createWorker);
+router.get("/:id",protect,authorize("admin", "reports"),getWorkerById);
+router.put("/:id",protect,authorize("admin", "receptionist"),updateWorker);
+router.delete("/:id",protect,authorize("admin"),deleteWorker);
+
 module.exports=router;
