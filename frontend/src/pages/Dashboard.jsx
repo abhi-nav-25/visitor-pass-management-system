@@ -1,11 +1,22 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 import StatCard from "../components/StatCard";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 function Dashboard() {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
   return (
     <DashboardLayout>
       <h1>Dashboard</h1>
-
+        <button onClick={handleLogout}>
+          Logout
+        </button>
         <div style={{display: "grid",gridTemplateColumns: "repeat(4, 1fr)",gap: "20px",marginTop: "20px"}}>
             <StatCard title="Total Visitors" value="120" />
             <StatCard title="Total Workers" value="45" />
