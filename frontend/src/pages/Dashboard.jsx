@@ -49,7 +49,7 @@ function Dashboard() {
             <StatCard title="Total Visitors" value={visitorCount} />
             <StatCard title="Total Workers" value={workerCount} />
             <StatCard title="Active Passes" value={passCount} />
-            <StatCard title="People Inside" value={logCount} />    
+            <StatCard title="Entry Logs" value={logCount} />    
         </div>
 
         <div
