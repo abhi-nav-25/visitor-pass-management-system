@@ -9,6 +9,7 @@ function Visitors() {
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [purpose, setPurpose] = useState("");
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     const fetchVisitors = async () => {
@@ -24,18 +25,36 @@ function Visitors() {
 
   const handleSubmit = async () => {
     try {
-      const response = await API.post("/visitors", {
-        name,
-        mobile,
-        purpose,
-      });
-
-      setVisitors([...visitors, response.data]);
+      if(editingId){
+        const response = await API.put(
+          `/visitors/${editingId}`,
+          {
+            name,
+            mobile,
+            purpose,
+          }
+        );
+        setVisitors(
+          visitors.map((visitor) =>
+            visitor._id === editingId?response.data:visitor)
+        );
+        setEditingId(null);
+      }else{
+        const response=await API.post(
+          "/visitors",
+          {
+            name,
+            mobile,
+            purpose,
+          }
+        );
+        setVisitors([...visitors,response.data,]);
+      }
       setName("");
       setMobile("");
       setPurpose("");
       setShowForm(false);
-    } catch (error) {
+    } catch(error){
       console.log(error);
     }
   };
@@ -45,6 +64,14 @@ function Visitors() {
     setVisitors(  
       visitors.filter((visitor) => visitor._id !== id)
     );
+  };
+
+  const handleEdit = (visitor) => {
+    setName(visitor.name);
+    setMobile(visitor.mobile);
+    setPurpose(visitor.purpose);
+    setEditingId(visitor._id);
+    setShowForm(true);
   };
 
   return (
@@ -71,7 +98,7 @@ function Visitors() {
         borderRadius: "10px",
       }}
     >
-      <h3>Add Visitor</h3>  
+      <h3>{editingId?"Edit Visitor":"Add Visitor"}</h3>
       <input
         placeholder="Name"
         value={name}
@@ -91,7 +118,7 @@ function Visitors() {
     />
       <br /><br />
       <button onClick={handleSubmit}>
-        Save Visitor
+        {editingId?"Update Visitor":"Save Visitor"}
       </button>
     </div>
   )}
@@ -120,6 +147,9 @@ function Visitors() {
           <td>{visitor.mobile}</td>
           <td>{visitor.purpose}</td>
           <td>
+            <button onClick={() => handleEdit(visitor)}>
+              Edit
+            </button>
             <button onClick={() => handleDelete(visitor._id)}>
               Delete
             </button>
