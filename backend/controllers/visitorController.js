@@ -62,10 +62,33 @@ const deleteVisitor=async(req,res)=>{
     }
 };
 
+const searchVisitors = async (req, res) => {
+    try {
+        const { name, mobile } = req.query;
+        let filter = {};
+        if (name) {
+            filter.name = {
+              $regex: name,
+                $options: "i"
+            };
+        }
+        if (mobile) {
+            filter.mobile = mobile;
+        }
+        const visitors = await Visitor.find(filter);
+        res.status(200).json(visitors);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 module.exports={
     getVisitors,
     createVisitor,
     getVisitorById,
     updateVisitor,
-    deleteVisitor
+    deleteVisitor,
+    searchVisitors
 };

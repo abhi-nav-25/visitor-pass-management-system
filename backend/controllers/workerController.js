@@ -62,10 +62,53 @@ const deleteWorker = async (req, res) => {
     }
 };
 
+const searchWorkers = async (req, res) => {
+    try {
+        const { name, mobile, department, designation } = req.query;
+
+        let filter = {};
+
+        if (name) {
+            filter.name = {
+                $regex: name,
+                $options: "i"
+            };
+        }
+
+        if (mobile) {
+            filter.mobile = mobile;
+        }
+
+        if (department) {
+            filter.department = {
+                $regex: department,
+                $options: "i"
+            };
+        }
+
+        if (designation) {
+            filter.designation = {
+                $regex: designation,
+                $options: "i"
+            };
+        }
+
+        const workers = await Worker.find(filter);
+
+        res.status(200).json(workers);
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     createWorker,
     getWorkers,
     getWorkerById,
     updateWorker,
-    deleteWorker
+    deleteWorker,
+    searchWorkers
 };

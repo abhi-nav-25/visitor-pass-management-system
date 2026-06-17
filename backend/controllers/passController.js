@@ -1,5 +1,6 @@
 const Pass = require("../models/Pass");
 const QRCode = require("qrcode");
+const RenewalHistory = require("../models/RenewalHistory");
 
 const createPass = async (req, res) => {
     try{
@@ -149,6 +150,99 @@ const verifyQRCode = async (req, res) => {
     }
 };
 
+const searchPasses = async (req, res) => {
+    try {
+        const { passType, status } = req.query;
+        let filter = {};
+        if (passType) {
+            filter.passType = passType;
+        }
+        if (status) {
+            filter.status = status;
+        }
+        const passes = await Pass.find(filter)
+            .populate("visitor")
+            .populate("worker");
+        res.status(200).json(passes);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+const getActivePasses = async (req, res) => {
+    try {
+        const passes = await Pass.find({status: "active"})
+            .populate("visitor")
+            .populate("worker");
+        res.status(200).json(passes);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+const getExpiredPasses = async (req, res) => {
+    try {
+        const passes = await Pass.find({expiryDate: { $lt: new Date() }})
+            .populate("visitor")
+            .populate("worker");
+        res.status(200).json(passes);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+const renewPass = async (req, res) => {
+    try {
+        const pass = await Pass.findById(req.params.id);
+        if (!pass) {
+            return res.status(404).json({
+                message: "Pass not found"
+            });
+        }
+        const oldExpiryDate = pass.expiryDate;
+        const newExpiryDate = new Date(req.body.newExpiryDate);
+        if (newExpiryDate <= oldExpiryDate) {
+            return res.status(400).json({
+                message: "New expiry date must be later than current expiry date"
+            });
+        }
+        pass.expiryDate = newExpiryDate;
+        await pass.save();
+        await RenewalHistory.create({
+            pass: pass._id,
+            oldExpiryDate,
+            newExpiryDate: req.body.newExpiryDate,
+            renewedBy: req.user._id
+        });
+        res.status(200).json(pass);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+const getRenewalHistory = async (req, res) => {
+    try {
+        const history = await RenewalHistory.find({
+            pass: req.params.id
+        })
+        .populate("renewedBy", "name email role")
+        .sort({ renewedAt: -1 });
+        res.status(200).json(history);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     createPass,
     getPasses,
@@ -157,5 +251,10 @@ module.exports = {
     deletePass,
     verifyPass,
     getPassQR,
-    verifyQRCode
+    verifyQRCode,
+    searchPasses,
+    getActivePasses,
+    getExpiredPasses,
+    renewPass,
+    getRenewalHistory
 };
