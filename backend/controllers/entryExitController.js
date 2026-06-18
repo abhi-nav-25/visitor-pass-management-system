@@ -49,7 +49,18 @@ const exitPerson = async (req, res) => {
 
 const getAllLogs= async(req,res)=>{
     try{
-        const logs=await EntryExitLog.find().populate("pass");
+        const logs=await EntryExitLog.find()
+        .populate({
+            path:"pass",
+            populate:[
+                {
+                    path:"visitor"
+                },
+                {
+                    path:"worker"
+                }
+            ]
+        });
         return res.status(200).json({logs});
     } catch(error){
         res.status(500).json({
@@ -60,7 +71,18 @@ const getAllLogs= async(req,res)=>{
 
 const getCurrentlyInside=async(req,res)=>{
     try{
-        const logs=await EntryExitLog.find({status:"inside"}).populate("pass");
+        const logs=await EntryExitLog.find({status:"inside"})
+        .populate({
+            path:"pass",
+            populate:[
+                {
+                    path:"visitor"
+                },
+                {
+                    path:"worker"
+                }
+            ]
+        });
         return res.status(200).json({logs});
     } catch(error){
         res.status(500).json({
