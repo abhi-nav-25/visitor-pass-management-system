@@ -14,6 +14,7 @@ const [visitor,setVisitor]=useState("");
 const [worker,setWorker]=useState("");
 const [expiryDate,setExpiryDate]=useState("");
 const [search,setSearch]=useState("");
+const [loading, setLoading] = useState(true);
 
 useEffect(()=>{
 fetchData();
@@ -32,9 +33,19 @@ const workerRes=await API.get("/workers");
 catch(error){
   console.log(error);
 }
-
+finally{
+  setLoading(false);
+}
 };
-
+if (loading) {
+  return (
+    <DashboardLayout>
+      <div className="text-center py-12">
+        Loading passes...
+      </div>
+    </DashboardLayout>
+  );
+}
 const handleSubmit=async()=>{
 try{
 const payload={
@@ -221,12 +232,23 @@ return (
           )}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100">
+        <div className="flex gap-3 mt-8 pt-6 border-t border-slate-100">
           <button
             onClick={handleSubmit}
             className="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold px-8 py-2.5 rounded-xl shadow-sm text-sm transition-colors"
           >
             Save Pass
+          </button>
+          <button
+            onClick={() => {
+              setShowForm(false);
+              setVisitor("");
+              setWorker("");
+              setExpiryDate("");
+            }}
+            className="bg-slate-200 hover:bg-slate-300 px-8 py-2.5 rounded-xl"
+          >
+            Cancel
           </button>
         </div>
       </div>
@@ -286,9 +308,14 @@ return (
       </div>
 
       {passes.length===0 ? (
-        <p className="text-slate-500 text-sm text-center py-12">
-          No passes found.
-        </p>
+        <div className="py-16 text-center">
+          <p className="text-lg font-semibold text-slate-700">
+            No Passes Found
+          </p>
+          <p className="text-slate-500 mt-2">
+            Create your first pass to get started.
+          </p>
+        </div>
       ) : filteredPasses.length===0 ? (
         <p className="text-slate-500 text-sm text-center py-12">
           No matching passes found.
@@ -298,8 +325,10 @@ return (
           <table className="w-full min-w-[760px] text-sm">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">Pass ID</th>
                 <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">Type</th>
                 <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">Holder</th>
+                <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">Issue Date</th>
                 <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">Expiry</th>
                 <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">Status</th>
                 <th className="text-left px-6 py-3 font-medium text-slate-500 text-xs uppercase tracking-wide">QR</th>
@@ -314,6 +343,7 @@ return (
                     key={pass._id}
                     className="hover:bg-slate-50 transition-colors"
                   >
+                    <td className="px-6 py-4 text-slate-700 font-medium">{pass._id.slice(-6)}</td>
                     <td className="px-6 py-4 capitalize text-slate-700">
                       {pass.passType}
                     </td>
@@ -322,6 +352,11 @@ return (
                       {pass.passType==="visitor"
                         ?pass.visitor?.name
                         :pass.worker?.name}
+                    </td>
+                    
+                    <td className="px-6 py-4 text-slate-600"> 
+                      {new Date(pass.issueDate)
+                      .toLocaleDateString("en-IN")}
                     </td>
 
                     <td className="px-6 py-4 text-slate-600">
@@ -366,7 +401,6 @@ return (
                         </button>
                       </div>
                     </td>
-
                   </tr>
                 ))}
             </tbody>
@@ -391,6 +425,13 @@ return (
         >
           Close
         </button>
+        <a
+          href={selectedQR}
+          download="pass-qr.png"
+          className="mt-2 block text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl"
+        >
+          Download QR
+        </a>
       </div>
     </div>
   )}
