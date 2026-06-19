@@ -6,7 +6,7 @@ import API from "../services/api";
 import { Users, HardHat, IdCard, ScrollText, LogOut } from "lucide-react";
 
 function Dashboard() {
-  const { logout } = useContext(AuthContext);
+  const { logout, role } = useContext(AuthContext);
   const [visitorCount, setVisitorCount] = useState(0);
   const [workerCount, setWorkerCount] = useState(0);
   const [passCount, setPassCount] = useState(0);
@@ -24,16 +24,35 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const visitors = await API.get("/visitors");
-        const workers = await API.get("/workers");
-        const passes = await API.get("/passes");
-        const logs = await API.get("/logs");
-        setVisitorCount(visitors.data.length);
-        setWorkerCount(workers.data.length);
-        setPassCount(passes.data.length);
-        setLogCount(logs.data.logs.length);
-        setRecentVisitors(visitors.data.slice(-5).reverse());
-        setRecentLogs(logs.data.logs.slice(-5).reverse());
+        if (role === "admin") {
+          const visitors = await API.get("/visitors");
+          const workers = await API.get("/workers");
+          const passes = await API.get("/passes");
+          const logs = await API.get("/logs");
+
+          setVisitorCount(visitors.data.length);
+          setWorkerCount(workers.data.length);
+          setPassCount(passes.data.length);
+          setLogCount(logs.data.logs.length);
+
+          setRecentVisitors(visitors.data.slice(-5).reverse());
+          setRecentLogs(logs.data.logs.slice(-5).reverse());
+        }
+
+        else if (role === "receptionist") {
+          const visitors = await API.get("/visitors");
+          const passes = await API.get("/passes");
+          setVisitorCount(visitors.data.length);
+          setPassCount(passes.data.length);
+          setRecentVisitors(visitors.data.slice(-5).reverse());
+        }
+
+        else if (role === "reports") {
+          const visitors = await API.get("/visitors");
+          const passes = await API.get("/passes");
+          setVisitorCount(visitors.data.length);
+          setPassCount(passes.data.length);
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -92,6 +111,7 @@ function Dashboard() {
           )}
         </div>
 
+          
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Total Workers</p>

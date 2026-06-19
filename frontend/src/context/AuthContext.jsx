@@ -7,6 +7,14 @@ function AuthProvider({ children }) {
     localStorage.getItem("token") || null
   );
 
+  const [role, setRole] = useState(
+    localStorage.getItem("role") || null
+  );
+
+  const [name, setName] = useState(
+    localStorage.getItem("name") || null
+  );
+
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
@@ -15,18 +23,40 @@ function AuthProvider({ children }) {
     }
   }, [token]);
 
-  const login = (newToken) => {
+  useEffect(() => {
+    if (role) {
+      localStorage.setItem("role", role);
+    } else {
+      localStorage.removeItem("role");
+    }
+  }, [role]);
+
+  useEffect(() => {
+    if (name) {
+      localStorage.setItem("name", name);
+    } else {
+      localStorage.removeItem("name");
+    }
+  }, [name]);
+
+  const login = (newToken, newRole, newName) => {
     setToken(newToken);
+    setRole(newRole);
+    setName(newName);
   };
 
   const logout = () => {
     setToken(null);
+    setRole(null);
+    setName(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         token,
+        role,
+        name,
         login,
         logout,
       }}

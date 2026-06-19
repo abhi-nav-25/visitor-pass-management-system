@@ -17,7 +17,7 @@ const {
 } = require("../controllers/passController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
-router.get("/",protect,authorize("admin", "reports", "security"),getPasses);
+router.get("/",protect,authorize("admin", "reports", "security", "receptionist"),getPasses);
 router.post("/",protect,authorize("admin", "receptionist"),createPass);
 router.post("/verify-qr",protect,authorize("admin", "security"),verifyQRCode);
 router.get("/search", protect, authorize("admin", "receptionist"), searchPasses);
