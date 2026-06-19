@@ -8,6 +8,7 @@ import Passes from "./pages/Passes";
 import Logs from "./pages/Logs";
 import Reports from "./pages/Reports";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
+import Gates from "./pages/Gates";
 
 function App() {
   return (
@@ -58,6 +59,14 @@ function App() {
         element={
           <ProtectedRoutes>
             <Reports />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="/gates"
+        element={
+          <ProtectedRoutes>
+              <Gates />
           </ProtectedRoutes>
         }
       />

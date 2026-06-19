@@ -11,9 +11,11 @@ const entryPerson = async (req, res) => {
             if(log && log.status==="inside")
                 return res.status(400).json({message:"Person is already inside"});
             else{
+                const { gate } = req.body;
                 await EntryExitLog.create({
                     pass: pass._id,
                     entryTime: new Date(),
+                    entryGate: gate,
                     status: "inside"
                 });
                 return res.status(200).json({message: "Welcome!"});
@@ -36,6 +38,7 @@ const exitPerson = async (req, res) => {
             if(!log || log.status==="outside")
                 return res.status(400).json({message:"No active entry found"});
             log.exitTime=new Date();
+            log.exitGate = req.body.gate;
             log.status="outside";
             await log.save();
             return res.status(200).json({message: "Exit recorded"});
@@ -50,6 +53,8 @@ const exitPerson = async (req, res) => {
 const getAllLogs= async(req,res)=>{
     try{
         const logs=await EntryExitLog.find()
+        .populate("entryGate", "gateName gateCode")
+        .populate("exitGate", "gateName gateCode")
         .populate({
             path:"pass",
             populate:[
@@ -72,6 +77,8 @@ const getAllLogs= async(req,res)=>{
 const getCurrentlyInside=async(req,res)=>{
     try{
         const logs=await EntryExitLog.find({status:"inside"})
+        .populate("entryGate", "gateName gateCode")
+        .populate("exitGate", "gateName gateCode")
         .populate({
             path:"pass",
             populate:[

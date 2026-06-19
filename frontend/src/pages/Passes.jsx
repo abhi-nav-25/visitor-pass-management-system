@@ -365,18 +365,28 @@ return (
 
                     <td className="px-6 py-4">
                       <span
-                        className={
-                          pass.status==="active"
-                          ? "inline-flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold"
-                          : pass.status==="expired"
-                          ? "inline-flex items-center bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold"
-                          : "inline-flex items-center bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold"
-                        }
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
+                          pass.status === "active"
+                            ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                            : pass.status === "expired"
+                            ? "bg-red-50 text-red-700 ring-1 ring-red-200"
+                            : "bg-yellow-50 text-yellow-700 ring-1 ring-yellow-200"
+                        }`}
                       >
-                        {pass.status.charAt(0).toUpperCase()+pass.status.slice(1)}
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          pass.status === "active"
+                            ? "bg-emerald-500"
+                            : pass.status === "expired"
+                            ? "bg-red-500"
+                            : "bg-yellow-500"
+                        }`}
+                      />
+                        {pass.status.charAt(0).toUpperCase() +
+                          pass.status.slice(1)}
                       </span>
                     </td>
-
+                    
                     <td className="px-6 py-4">
                       <img
                         src={pass.qrCode}

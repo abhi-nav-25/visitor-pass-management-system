@@ -18,6 +18,14 @@ const entryExitLogSchema = new mongoose.Schema(
             type: String,
             enum: ["inside","outside"],
             required: true
+        },
+        entryGate: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Gate",
+        },
+        exitGate: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Gate",
         }
     },
     {

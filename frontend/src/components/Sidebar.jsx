@@ -12,6 +12,7 @@ import {
   X,
   LogOut,
   ShieldCheck,
+  DoorOpen
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { to: "/passes", label: "Passes", icon: IdCard },
   { to: "/logs", label: "Logs", icon: ScrollText },
   { to: "/reports", label: "Reports", icon: BarChart3 },
+  { to: "/gates", label: "Gates", icon: DoorOpen },
 ];
 
 function Sidebar({ isOpen, onClose }) {

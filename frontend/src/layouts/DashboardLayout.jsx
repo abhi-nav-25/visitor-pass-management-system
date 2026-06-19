@@ -2,36 +2,6 @@ import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-/**
- * ─────────────────────────────────────────────────────────────────────────
- * DESIGN SYSTEM REFERENCE
- * Every page (Dashboard, Visitors, Workers, Passes, Logs, Reports) is built
- * on top of this shell. Keep these tokens in mind so new components stay
- * visually consistent — copy these classes rather than inventing new ones.
- * ─────────────────────────────────────────────────────────────────────────
- * Page background      bg-slate-50
- * Cards / surfaces      bg-white, rounded-2xl, border border-slate-200, shadow-sm
- * Primary action        bg-blue-600 hover:bg-blue-700 text-white, rounded-lg
- * Secondary action       bg-white border border-slate-300 text-slate-700 hover:bg-slate-50
- * Body text             text-slate-700 / muted text-slate-500
- * Headings              text-slate-900 font-semibold
- * Inputs                rounded-lg border-slate-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500
- * Sidebar width          18rem (w-72), fixed on lg+, slide-over drawer below lg
- * Page gutters           px-4 sm:px-6 lg:px-8, content capped at max-w-7xl
- * ─────────────────────────────────────────────────────────────────────────
- */
-
-/**
- * DashboardLayout
- * Shared shell for every authenticated page. Renders the sidebar + navbar,
- * and gives every page a consistent header (title, description, actions)
- * so e.g. "Visitors" and "Workers" line up pixel-for-pixel.
- *
- * @param {string} title - Page title shown in the header (e.g. "Visitors")
- * @param {string} description - Optional one-line subtitle under the title
- * @param {React.ReactNode} actions - Optional right-aligned controls (buttons, etc.)
- * @param {React.ReactNode} children - Page content
- */
 function DashboardLayout({ title, description, actions, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
