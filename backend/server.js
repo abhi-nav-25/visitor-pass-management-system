@@ -29,6 +29,9 @@ app.use("/api/auth", authRoutes);
 const gateRoutes = require("./routes/gateRoutes");
 app.use("/api/gates", gateRoutes);
 
+const areaRoutes = require("./routes/areaRoutes");
+app.use("/api/areas", areaRoutes);
+
 app.listen(process.env.PORT || 5000, () => {
     console.log(`Server running on port ${process.env.PORT || 5000}`);
 });

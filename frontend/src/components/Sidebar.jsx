@@ -12,7 +12,8 @@ import {
   X,
   LogOut,
   ShieldCheck,
-  DoorOpen
+  DoorOpen,
+  MapPinned
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -23,6 +24,7 @@ const NAV_ITEMS = [
   { to: "/logs", label: "Logs", icon: ScrollText },
   { to: "/reports", label: "Reports", icon: BarChart3 },
   { to: "/gates", label: "Gates", icon: DoorOpen },
+  { to: "/areas", label: "Areas", icon: MapPinned }
 ];
 
 function Sidebar({ isOpen, onClose }) {
