@@ -14,7 +14,8 @@ import {
   ShieldCheck,
   DoorOpen,
   MapPinned,
-  Building2
+  Building2,
+  Building
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -26,7 +27,8 @@ const NAV_ITEMS = [
   { to: "/reports", label: "Reports", icon: BarChart3 },
   { to: "/gates", label: "Gates", icon: DoorOpen },
   { to: "/areas", label: "Areas", icon: MapPinned },
-  { to: "/buildings", label: "Buildings", icon: Building2 }
+  { to: "/buildings", label: "Buildings", icon: Building2 },
+  { to: "/departments", label: "Departments", icon: Building }
 ];
 
 function Sidebar({ isOpen, onClose }) {

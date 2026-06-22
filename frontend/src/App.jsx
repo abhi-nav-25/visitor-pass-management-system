@@ -11,6 +11,7 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import Gates from "./pages/Gates";
 import Areas from "./pages/Areas";
 import Buildings from "./pages/Buildings";
+import Departments from "./pages/Departments";
 
 function App() {
   return (
@@ -86,6 +87,15 @@ function App() {
         element={
           <ProtectedRoutes>
             <Buildings />
+          </ProtectedRoutes>
+        }
+      />
+
+      <Route
+        path="/departments"
+        element={
+          <ProtectedRoutes>
+            <Departments />
           </ProtectedRoutes>
         }
       />
