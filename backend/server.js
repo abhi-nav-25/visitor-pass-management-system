@@ -35,6 +35,9 @@ app.use("/api/areas", areaRoutes);
 const buildingRoutes = require("./routes/buildingRoutes");
 app.use("/api/buildings", buildingRoutes);
 
+const departmentRoutes = require("./routes/departmentRoutes");
+app.use("/api/departments", departmentRoutes);
+
 app.listen(process.env.PORT || 5000, () => {
     console.log(`Server running on port ${process.env.PORT || 5000}`);
 });

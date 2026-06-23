@@ -31,8 +31,61 @@ const NAV_ITEMS = [
   { to: "/departments", label: "Departments", icon: Building }
 ];
 
+const ROLE_NAV = {
+  admin: [
+    "/dashboard",
+    "/visitors",
+    "/workers",
+    "/passes",
+    "/logs",
+    "/reports",
+    "/gates",
+    "/areas",
+    "/buildings",
+    "/departments",
+  ],
+
+  receptionist: [
+    "/dashboard",
+    "/visitors",
+    "/workers",
+    "/passes",
+    "/gates",
+    "/areas",
+    "/buildings",
+    "/departments",
+  ],
+
+  security: [
+    "/dashboard",
+    "/passes",
+    "/logs",
+    "/gates",
+    "/areas",
+    "/buildings",
+    "/departments",
+  ],
+
+  reports: [
+    "/dashboard",
+    "/visitors",
+    "/workers",
+    "/passes",
+    "/logs",
+    "/reports",
+    "/gates",
+    "/areas",
+    "/buildings",
+    "/departments",
+  ],
+};
+
 function Sidebar({ isOpen, onClose }) {
-  const { logout }=useContext(AuthContext);
+  const {
+    logout,
+    role,
+    name
+  } = useContext(AuthContext);
   const navigate=useNavigate();
   const handleLogout=()=>{
     logout();
@@ -60,7 +113,7 @@ function Sidebar({ isOpen, onClose }) {
             <p className="text-base font-semibold leading-tight text-white">
               Visitor Pass
             </p>
-            <p className="text-xs text-slate-400">Admin Panel</p>
+            <p className="text-xs text-slate-400">{role} Access</p>
           </div>
         </div>
 
@@ -76,11 +129,15 @@ function Sidebar({ isOpen, onClose }) {
 
       {/* Nav links */}
       <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-2">
-        {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} className={linkClass} onClick={onClose}>
-            <Icon className="h-[18px] w-[18px] flex-shrink-0" />
-            {label}
-          </NavLink>
+        {NAV_ITEMS
+          .filter(item =>
+            ROLE_NAV[role]
+            ?.includes(item.to)
+          ).map(({ to, label, icon: Icon }) => (
+            <NavLink key={to} to={to} className={linkClass} onClick={onClose}>
+              <Icon className="h-[18px] w-[18px] flex-shrink-0" />
+              {label}
+            </NavLink>
         ))}
       </nav>
 
@@ -91,8 +148,8 @@ function Sidebar({ isOpen, onClose }) {
             A
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-white">Admin User</p>
-            <p className="truncate text-xs text-slate-400">Site Administrator</p>
+            <p className="truncate text-sm font-medium text-white">{name}</p>
+            <p className="truncate text-xs text-slate-400">{role}</p>
           </div>
           <button
             type="button"

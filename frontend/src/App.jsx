@@ -28,7 +28,12 @@ function App() {
       <Route
         path="/visitors"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={[
+              "admin",
+              "receptionist"
+            ]}
+          >
             <Visitors />
           </ProtectedRoutes>
         }
@@ -36,7 +41,12 @@ function App() {
       <Route
         path="/workers"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={[
+              "admin",
+              "receptionist"
+            ]}
+          >
             <Workers />
           </ProtectedRoutes>
         }
@@ -44,7 +54,12 @@ function App() {
       <Route
         path="/passes"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={[
+              "admin",
+              "receptionist"
+            ]}
+          >
             <Passes />
           </ProtectedRoutes>
         }
@@ -52,7 +67,12 @@ function App() {
       <Route
         path="/logs"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={[
+              "admin",
+              "security"
+            ]}
+          >
             <Logs />
           </ProtectedRoutes>
         }
@@ -60,7 +80,9 @@ function App() {
       <Route
         path="/reports"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={["admin"]}
+          >
             <Reports />
           </ProtectedRoutes>
         }
@@ -68,7 +90,9 @@ function App() {
       <Route
         path="/gates"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={["admin"]}
+          >
               <Gates />
           </ProtectedRoutes>
         }
@@ -76,7 +100,9 @@ function App() {
       <Route
         path="/areas"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={["admin"]}
+          >
             <Areas />
           </ProtectedRoutes>
         }
@@ -85,7 +111,9 @@ function App() {
       <Route
         path="/buildings"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={["admin"]}
+          >
             <Buildings />
           </ProtectedRoutes>
         }
@@ -94,7 +122,9 @@ function App() {
       <Route
         path="/departments"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={["admin"]}
+          >
             <Departments />
           </ProtectedRoutes>
         }

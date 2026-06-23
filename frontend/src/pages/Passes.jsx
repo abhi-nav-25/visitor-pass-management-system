@@ -1,6 +1,8 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useState,useEffect } from "react";
 import API from "../services/api";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function Passes() {
 const [passes,setPasses]=useState([]);
@@ -9,6 +11,9 @@ const [workers,setWorkers]=useState([]);
 
 const [showForm,setShowForm]=useState(false);
 const [selectedQR,setSelectedQR]=useState(null);
+const [history,setHistory]=useState([]);
+const [showHistory,setShowHistory]=useState(false);
+const [selectedPass,setSelectedPass] = useState(null);
 const [passType,setPassType]=useState("visitor");
 const [visitor,setVisitor]=useState("");
 const [worker,setWorker]=useState("");
@@ -114,6 +119,45 @@ const handleRenew=async(id)=>{
   catch(error){
     console.log(error);
   }
+};
+
+const handleHistory = async (id) => {
+  try {
+    const { data } = await API.get(
+      `/passes/${id}/history`
+    );
+    setHistory(data);
+    setShowHistory(true);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const downloadPDF = async () => {
+  const input=document.getElementById("pass-pdf");
+  if (!input) return;
+  const canvas =await html2canvas(input,{scale:3, useCORS:true,});
+  const imgData =canvas.toDataURL("image/png",1.0);
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
+  const pdfWidth = 190;
+  const pdfHeight =
+    (canvas.height * pdfWidth) /
+    canvas.width;
+  pdf.addImage(
+    imgData,
+    "PNG",
+    10,
+    10,
+    pdfWidth,
+    pdfHeight
+  );
+  pdf.save(
+    `pass-${selectedPass._id.slice(-6)}.pdf`
+  );
 };
 
 const filteredPasses=passes.filter((pass)=>{
@@ -398,10 +442,22 @@ return (
                     <td className="px-6 py-4">
                       <div className="flex flex-wrap gap-2">
                         <button
+                          onClick={() => handleHistory(pass._id)}
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold"
+                        >
+                          History
+                        </button>
+                        <button
                           onClick={()=>handleRenew(pass._id)}
                           className="bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
                         >
                           Renew
+                        </button>
+                        <button
+                          onClick={() => setSelectedPass(pass)}
+                          className="bg-green-600 hover:bg-green-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold"
+                        >
+                          PDF
                         </button>
                         <button
                           onClick={()=>handleDelete(pass._id)}
@@ -445,6 +501,139 @@ return (
       </div>
     </div>
   )}
+  {showHistory && (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-2xl shadow-xl w-[800px] max-h-[80vh] overflow-y-auto">
+        <h3 className="text-xl font-bold mb-4">
+          Renewal History
+        </h3>
+        {history.length === 0 ? (
+          <p>No renewals found.</p>
+        ) : (
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr>
+                <th className="border p-2">
+                  Old Expiry
+                </th>
+                <th className="border p-2">
+                  New Expiry
+                </th>
+                <th className="border p-2">
+                  Renewed By
+                </th>
+                <th className="border p-2">
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {history.map((item) => (
+                <tr key={item._id} className="hover:bg-slate-50">
+                  <td className="border p-2">
+                    {new Date(
+                      item.oldExpiryDate
+                    ).toLocaleDateString()}
+                  </td>
+                  <td className="border p-2">
+                    {new Date(
+                      item.newExpiryDate
+                    ).toLocaleDateString()}
+                  </td>
+                  <td className="border p-2">
+                    <div>{item.renewedBy?.name}</div>
+                    <div className="text-xs text-slate-500">
+                      {item.renewedBy?.email}
+                    </div>
+                  </td>
+                  <td className="border p-2">
+                    {new Date(
+                      item.renewedAt
+                    ).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <button
+          onClick={() => setShowHistory(false)}
+          className="mt-4 w-full bg-blue-600 text-white py-2 rounded-xl"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  )}
+  {selectedPass && (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-2xl shadow-xl">
+        <div
+          id="pass-pdf"
+          className="p-6 border rounded-xl"
+        >
+          <h2 className="text-2xl font-bold mb-4">
+            Visitor Pass
+          </h2>
+
+          <p>
+            <strong>Pass ID:</strong>{" "}
+            {selectedPass._id}
+          </p>
+
+          <p>
+            <strong>Name:</strong>{" "}
+            {selectedPass.passType === "visitor"
+              ? selectedPass.visitor?.name
+              : selectedPass.worker?.name}
+          </p>
+
+          <p>
+            <strong>Pass Type:</strong>{" "}
+            {selectedPass.passType}
+          </p>
+
+          <p>
+            <strong>Issue Date:</strong>{" "}
+            {new Date(
+              selectedPass.issueDate
+            ).toLocaleDateString()}
+          </p>
+
+          <p>
+            <strong>Expiry Date:</strong>{" "}
+            {new Date(
+              selectedPass.expiryDate
+            ).toLocaleDateString()}
+          </p>
+
+          <img
+            src={selectedPass.qrCode}
+            alt="QR"
+            className="w-40 h-40 mt-4"
+          />
+        </div>
+
+        <div className="flex gap-3 mt-4">
+          <button
+            onClick={downloadPDF}
+            className="flex-1 bg-green-600 text-white py-2 rounded-xl"
+          >
+            Download PDF
+          </button>
+
+          <button
+            onClick={() =>
+              setSelectedPass(null)
+            }
+            className="flex-1 bg-slate-300 py-2 rounded-xl"
+          >
+            Close
+          </button>
+        </div>
+    </div>
+  </div>
+)}
 </DashboardLayout>
 );
 }
