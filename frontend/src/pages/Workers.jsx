@@ -16,6 +16,9 @@ function Workers() {
   const [workers, setWorkers] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [idProofType, setIdProofType] = useState("");
+  const [idProofNumber, setIdProofNumber] = useState("");
   const [mobile, setMobile] = useState("");
   const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
@@ -66,6 +69,9 @@ function Workers() {
             mobile,
             department,
             designation,
+            address,
+            idProofType,
+            idProofNumber,
             startDate,
             expiryDate,
           }
@@ -82,6 +88,9 @@ function Workers() {
           mobile,
           department,
           designation,
+          address,
+          idProofType,
+          idProofNumber,
           startDate,
           expiryDate,
         });
@@ -91,6 +100,9 @@ function Workers() {
       setMobile("");
       setDepartment("");
       setDesignation("");
+      setAddress("");
+      setIdProofType("");
+      setIdProofNumber("");
       setStartDate("");
       setExpiryDate("");
       setShowForm(false);
@@ -113,6 +125,9 @@ function Workers() {
     setMobile(worker.mobile);
     setDepartment(worker.department);
     setDesignation(worker.designation);
+    setAddress(worker.address || "");
+    setIdProofType(worker.idProofType || "");
+    setIdProofNumber(worker.idProofNumber || "");
     setStartDate(worker.startDate ? worker.startDate.split("T")[0] : "");
     setExpiryDate(worker.expiryDate ? worker.expiryDate.split("T")[0] : "");
     setEditingId(worker._id);
@@ -173,22 +188,25 @@ function Workers() {
           />
 
           {(isAdmin || isReceptionist) && (
-          <button
-            onClick={() => {
-              setShowForm(true);
-              setEditingId(null);
-              setName("");
-              setMobile("");
-              setDepartment("");
-              setDesignation("");
-              setStartDate("");
-              setExpiryDate("");
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2"
-          >
-            <UserPlus size={18} />
-            Add Worker
-          </button>
+            <button
+              onClick={() => {
+                setShowForm(true);
+                setEditingId(null);
+                setName("");
+                setAddress("");
+                setIdProofType("");
+                setIdProofNumber("");
+                setMobile("");
+                setDepartment("");
+                setDesignation("");
+                setStartDate("");
+                setExpiryDate("");
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2"
+            >
+              <UserPlus size={18} />
+              Add Worker
+            </button>
           )}
         </div>
 
@@ -205,6 +223,34 @@ function Workers() {
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="border rounded-xl px-4 py-2"
+              />
+
+              <input
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="border rounded-xl px-4 py-2"
+              />
+
+              <select
+                value={idProofType}
+                onChange={(e) => setIdProofType(e.target.value)}
+                className="border rounded-xl px-4 py-2"
+              >
+                <option value="">Select ID Proof</option>
+                <option value="Aadhaar">Aadhaar</option>
+                <option value="PAN">PAN</option>
+                <option value="Driving License">Driving License</option>
+                <option value="Passport">Passport</option>
+                <option value="Voter ID">Voter ID</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <input
+                placeholder="ID Proof Number"
+                value={idProofNumber}
+                onChange={(e) => setIdProofNumber(e.target.value)}
                 className="border rounded-xl px-4 py-2"
               />
 
@@ -267,6 +313,9 @@ function Workers() {
                   setShowForm(false);
                   setEditingId(null);
                   setName("");
+                  setAddress("");
+                  setIdProofType("");
+                  setIdProofNumber("");
                   setMobile("");
                   setDepartment("");
                   setDesignation("");
@@ -311,6 +360,15 @@ function Workers() {
                     Name
                   </th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Address
+                  </th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    ID Type
+                  </th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    ID Number
+                  </th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                     Mobile
                   </th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -342,7 +400,9 @@ function Workers() {
                     <td className="p-3 font-medium text-slate-800">
                       {worker.name}
                     </td>
-
+                    <td className="p-3">{worker.address}</td>
+                    <td className="p-3">{worker.idProofType}</td>
+                    <td className="p-3">{worker.idProofNumber}</td>
                     <td className="p-3">{worker.mobile}</td>
 
                     <td className="p-3">
@@ -357,25 +417,24 @@ function Workers() {
                     <td className="p-3 text-slate-500">
                       {worker.startDate
                         ? new Date(worker.startDate).toLocaleDateString(
-                            "en-IN",
-                            { day: "2-digit", month: "short", year: "numeric" }
-                          )
+                          "en-IN",
+                          { day: "2-digit", month: "short", year: "numeric" }
+                        )
                         : "—"}
                     </td>
 
                     <td className="p-3">
                       <span
-                        className={`text-sm ${
-                          isExpired(worker.expiryDate)
+                        className={`text-sm ${isExpired(worker.expiryDate)
                             ? "text-red-600 font-medium"
                             : "text-slate-500"
-                        }`}
+                          }`}
                       >
                         {worker.expiryDate
                           ? new Date(worker.expiryDate).toLocaleDateString(
-                              "en-IN",
-                              { day: "2-digit", month: "short", year: "numeric" }
-                            )
+                            "en-IN",
+                            { day: "2-digit", month: "short", year: "numeric" }
+                          )
                           : "—"}
                       </span>
                     </td>
@@ -387,7 +446,7 @@ function Workers() {
                         </span>
                       ) : (
                         <div className="flex gap-2">
-                        
+
                           <button
                             onClick={() => handleEdit(worker)}
                             className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-lg flex items-center gap-1"
