@@ -3,7 +3,6 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const errorHandler = require("./middleware/errorHandler");
-const mongoSanitize = require("express-mongo-sanitize");
 
 const app = express();
 app.disable("x-powered-by");
@@ -22,7 +21,6 @@ app.use(
 );
 app.use(helmet());
 app.use(express.json());
-app.use(mongoSanitize());
 
 app.use(
   "/uploads",
