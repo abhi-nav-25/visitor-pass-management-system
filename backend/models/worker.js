@@ -18,6 +18,7 @@ const workerSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      index:true,
     },
 
     department: {
@@ -49,6 +50,7 @@ const workerSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      index:true,
     },
 
     personPhoto: {

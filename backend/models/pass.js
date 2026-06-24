@@ -28,11 +28,13 @@ const passSchema = new mongoose.Schema({
 
     expiryDate: {
         type: Date,
+        index:true,
         required: true
     },
 
     status: {
         type: String,
+        index:true,
         enum: ["active", "expired", "blocked"],
         default: "active"
     }

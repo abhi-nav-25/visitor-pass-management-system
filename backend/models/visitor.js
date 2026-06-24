@@ -17,6 +17,7 @@ const visitorSchema = new mongoose.Schema(
     mobile: {
       type: String,
       required: true,
+      index:true,
       trim: true,
     },
 
@@ -42,6 +43,7 @@ const visitorSchema = new mongoose.Schema(
     idProofNumber: {
       type: String,
       required: true,
+      index:true,
       trim: true,
     },
 

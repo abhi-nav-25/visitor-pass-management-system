@@ -1,10 +1,10 @@
-const Worker=require("../models/Worker");
+const Worker = require("../models/Worker");
 
-const createWorker=async (req,res) =>{
-    try{
-        const worker=await Worker.create(req.body);
+const createWorker = async (req, res) => {
+    try {
+        const worker = await Worker.create(req.body);
         res.status(201).json(worker);
-    } catch(error){
+    } catch (error) {
         res.status(500).json({
             message: error.message
         });
@@ -26,11 +26,11 @@ const getWorkerById = async (req, res) => {
     try {
         const worker = await Worker.findById(req.params.id);
         if (!worker) {
-            return res.status(404).json({message: "Worker not found"});
+            return res.status(404).json({ message: "Worker not found" });
         }
         res.status(200).json(worker);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -39,33 +39,38 @@ const updateWorker = async (req, res) => {
         const worker = await Worker.findByIdAndUpdate(
             req.params.id,
             req.body,
-            {new : true}
+            { new: true }
         );
         if (!worker) {
-            return res.status(404).json({message: "Worker not found"});
+            return res.status(404).json({ message: "Worker not found" });
         }
         res.status(200).json(worker);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
 const deleteWorker = async (req, res) => {
     try {
-        const worker=await Worker.findByIdAndDelete(req.params.id);
-        if(!worker){
-            return res.status(404).json({message: "Worker not found"})
+        const worker = await Worker.findByIdAndDelete(req.params.id);
+        if (!worker) {
+            return res.status(404).json({ message: "Worker not found" })
         }
-        return res.status(200).json({message:"Worker deleted successfully"})
+        return res.status(200).json({ message: "Worker deleted successfully" })
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
 const searchWorkers = async (req, res) => {
     try {
-        const { name, mobile, department, designation } = req.query;
-
+        const {
+            name,
+            mobile,
+            department,
+            designation,
+            idProofNumber
+        } = req.query;
         let filter = {};
 
         if (name) {
@@ -89,6 +94,13 @@ const searchWorkers = async (req, res) => {
         if (designation) {
             filter.designation = {
                 $regex: designation,
+                $options: "i"
+            };
+        }
+
+        if (idProofNumber) {
+            filter.idProofNumber = {
+                $regex: idProofNumber,
                 $options: "i"
             };
         }

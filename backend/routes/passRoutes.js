@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { body } = require("express-validator");
+const validateRequest = require("../middleware/validateRequest");
 const {
     getPasses,
     createPass,
@@ -18,14 +20,29 @@ const {
 const { protect, authorize } = require("../middleware/authMiddleware");
 
 router.get("/",protect,authorize("admin", "reports", "security", "receptionist"),getPasses);
-router.post("/",protect,authorize("admin", "receptionist"),createPass);
+router.post(
+  "/",
+  protect,
+  authorize("admin", "receptionist"),
+
+  body("passType")
+    .isIn(["visitor", "worker"])
+    .withMessage("Invalid pass type"),
+
+  body("expiryDate")
+    .notEmpty()
+    .withMessage("Expiry date required"),
+
+  validateRequest,
+
+  createPass
+);
 router.post("/verify-qr",protect,authorize("admin", "security"),verifyQRCode);
 router.get("/search", protect, authorize("admin", "receptionist"), searchPasses);
 router.get("/active",protect,authorize("admin", "receptionist"),getActivePasses);
 router.get("/expired",protect,authorize("admin", "receptionist"),getExpiredPasses);
 router.put("/:id/renew",protect,authorize("admin", "receptionist"),renewPass);
 router.get("/:id/history",protect,authorize("admin", "receptionist"),getRenewalHistory);
-router.put("/:id/renew",protect,authorize("admin", "receptionist"),renewPass);
 router.get("/:id/qr",protect,authorize("admin", "security", "reports"),getPassQR);
 router.get("/verify/:id",protect,authorize("admin", "security"),verifyPass);
 router.get("/:id",protect,authorize("admin", "reports", "security"),getPassById);
