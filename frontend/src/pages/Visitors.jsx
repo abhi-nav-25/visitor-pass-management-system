@@ -18,10 +18,13 @@ function Visitors() {
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [purpose, setPurpose] = useState("");
+  const [address, setAddress] = useState("");
+  const [idProofType, setIdProofType] = useState("");
+  const [idProofNumber, setIdProofNumber] = useState("");
   const [editingId, setEditingId] = useState(null);
-  const [search,setSearch] = useState("");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  
+
   const { role } = useContext(AuthContext);
   const isAdmin = role === "admin";
   const isReceptionist = role === "receptionist";
@@ -53,27 +56,33 @@ function Visitors() {
 
   const handleSubmit = async () => {
     try {
-      if(editingId){
+      if (editingId) {
         const response = await API.put(
           `/visitors/${editingId}`,
           {
             name,
+            address,
             mobile,
             purpose,
+            idProofType,
+            idProofNumber,
           }
         );
         setVisitors(
           visitors.map((visitor) =>
-            visitor._id === editingId?response.data:visitor)
+            visitor._id === editingId ? response.data : visitor)
         );
         setEditingId(null);
-      }else{
-        const response=await API.post(
+      } else {
+        const response = await API.post(
           "/visitors",
           {
             name,
+            address,
             mobile,
             purpose,
+            idProofType,
+            idProofNumber,
           }
         );
         setVisitors(prev => [...prev, response.data]);
@@ -81,8 +90,11 @@ function Visitors() {
       setName("");
       setMobile("");
       setPurpose("");
+      setAddress("");
+      setIdProofType("");
+      setIdProofNumber("");
       setShowForm(false);
-    } catch(error){
+    } catch (error) {
       console.log(error);
     }
   };
@@ -103,6 +115,9 @@ function Visitors() {
     setMobile(visitor.mobile);
     setPurpose(visitor.purpose);
     setEditingId(visitor._id);
+    setAddress(visitor.address || "");
+    setIdProofType(visitor.idProofType || "");
+    setIdProofNumber(visitor.idProofNumber || "");
     setShowForm(true);
   };
 
@@ -118,7 +133,7 @@ function Visitors() {
             <p className="text-slate-500 text-sm">
               Total Visitors
             </p>
-  
+
             <h2 className="text-4xl font-bold mt-2 text-slate-900">
               {visitors.length}
             </h2>
@@ -158,19 +173,22 @@ function Visitors() {
             className="w-full md:w-80 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {(isAdmin || isReceptionist) && (
-          <button
-            onClick={() => {
-              setShowForm(true);
-              setEditingId(null);
-              setName("");
-              setMobile("");
-              setPurpose("");
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2"
-          >
-            <UserPlus size={18} />
-            Add Visitor
-          </button>
+            <button
+              onClick={() => {
+                setShowForm(true);
+                setEditingId(null);
+                setName("");
+                setMobile("");
+                setPurpose("");
+                setAddress("");
+                setIdProofType("");
+                setIdProofNumber("");
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2"
+            >
+              <UserPlus size={18} />
+              Add Visitor
+            </button>
           )}
         </div>
 
@@ -194,9 +212,37 @@ function Visitors() {
               />
 
               <input
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="border rounded-xl px-4 py-2"
+              />
+
+              <input
                 placeholder="Mobile"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
+                className="border rounded-xl px-4 py-2"
+              />
+
+              <select
+                value={idProofType}
+                onChange={(e) => setIdProofType(e.target.value)}
+                className="border rounded-xl px-4 py-2"
+              >
+                <option value="">Select ID Proof</option>
+                <option value="Aadhaar">Aadhaar</option>
+                <option value="PAN">PAN</option>
+                <option value="Driving License">Driving License</option>
+                <option value="Passport">Passport</option>
+                <option value="Voter ID">Voter ID</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <input
+                placeholder="ID Proof Number"
+                value={idProofNumber}
+                onChange={(e) => setIdProofNumber(e.target.value)}
                 className="border rounded-xl px-4 py-2"
               />
 
@@ -225,6 +271,9 @@ function Visitors() {
                   setName("");
                   setMobile("");
                   setPurpose("");
+                  setAddress("");
+                  setIdProofType("");
+                  setIdProofNumber("");
                 }}
                 className="bg-slate-200 hover:bg-slate-300 px-5 py-2 rounded-xl"
               >
@@ -248,7 +297,7 @@ function Visitors() {
 
             <p className="text-lg font-semibold text-slate-700">
               No Visitors Found
-            </p>  
+            </p>
 
             <p className="text-slate-500 mt-2">
               Visitor records will appear here.
@@ -264,6 +313,9 @@ function Visitors() {
                 <tr className="border-b bg-slate-50">
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">#</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Name</th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Address</th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">ID Type</th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">ID Number</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Mobile</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Purpose</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
@@ -285,6 +337,9 @@ function Visitors() {
                       {visitor.name}
                     </td>
 
+                    <td className="p-3">{visitor.address}</td>
+                    <td className="p-3">{visitor.idProofType}</td>
+                    <td className="p-3">{visitor.idProofNumber}</td>
                     <td className="p-3">
                       {visitor.mobile}
                     </td>

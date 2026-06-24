@@ -64,7 +64,7 @@ const deleteVisitor=async(req,res)=>{
 
 const searchVisitors = async (req, res) => {
     try {
-        const { name, mobile } = req.query;
+        const { name, mobile, idProofNumber } = req.query;
         let filter = {};
         if (name) {
             filter.name = {
@@ -74,6 +74,12 @@ const searchVisitors = async (req, res) => {
         }
         if (mobile) {
             filter.mobile = mobile;
+        }
+        if (idProofNumber) {
+            filter.idProofNumber = {
+                $regex: idProofNumber,
+                $options: "i",
+            };
         }
         const visitors = await Visitor.find(filter);
         res.status(200).json(visitors);
