@@ -7,6 +7,10 @@ import { Users, HardHat, IdCard, ScrollText, LogOut } from "lucide-react";
 
 function Dashboard() {
   const { logout, role } = useContext(AuthContext);
+  const isAdmin = role === "admin";
+  const isReceptionist = role === "receptionist";
+  const isSecurity = role === "security";
+  const isReports = role === "reports";
   const [visitorCount, setVisitorCount] = useState(0);
   const [workerCount, setWorkerCount] = useState(0);
   const [passCount, setPassCount] = useState(0);
@@ -41,17 +45,39 @@ function Dashboard() {
 
         else if (role === "receptionist") {
           const visitors = await API.get("/visitors");
+          const workers = await API.get("/workers");
           const passes = await API.get("/passes");
           setVisitorCount(visitors.data.length);
+          setWorkerCount(workers.data.length);
           setPassCount(passes.data.length);
           setRecentVisitors(visitors.data.slice(-5).reverse());
         }
 
         else if (role === "reports") {
           const visitors = await API.get("/visitors");
+          const workers = await API.get("/workers");
           const passes = await API.get("/passes");
+          const logs = await API.get("/logs");
+
           setVisitorCount(visitors.data.length);
+          setWorkerCount(workers.data.length);
           setPassCount(passes.data.length);
+          setLogCount(logs.data.logs.length);
+          setRecentVisitors(
+            visitors.data.slice(-5).reverse()
+          );
+          setRecentLogs(
+            logs.data.logs.slice(-5).reverse()
+          );
+        }
+        else if (role === "security") {
+          const passes = await API.get("/passes");
+          const logs = await API.get("/logs/inside");
+          setPassCount(passes.data.length);
+          setLogCount(logs.data.logs.length);
+          setRecentLogs(
+            logs.data.logs.slice(-5).reverse()
+          );
         }
       } catch (error) {
         console.log(error);
@@ -96,7 +122,16 @@ function Dashboard() {
       }
     >
       {/* Summary stat cards */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div
+        className={`grid gap-5 ${
+        isSecurity
+          ? "grid-cols-1 sm:grid-cols-2"
+          : isReceptionist
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+        }`}
+      >
+        {!isSecurity && (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Total Visitors</p>
@@ -110,8 +145,9 @@ function Dashboard() {
             <p className="mt-3 text-3xl font-semibold text-slate-900">{visitorCount}</p>
           )}
         </div>
+        )}
 
-          
+        {!isSecurity && (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Total Workers</p>
@@ -125,6 +161,7 @@ function Dashboard() {
             <p className="mt-3 text-3xl font-semibold text-slate-900">{workerCount}</p>
           )}
         </div>
+        )}
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
@@ -140,6 +177,7 @@ function Dashboard() {
           )}
         </div>
 
+        {!isReceptionist && (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Entry Logs</p>
@@ -153,9 +191,11 @@ function Dashboard() {
             <p className="mt-3 text-3xl font-semibold text-slate-900">{logCount}</p>
           )}
         </div>
+        )}
       </div>
 
       {/* Recent Visitors */}
+      {(isAdmin || isReceptionist || isReports) && (
       <div className="mt-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-4">
           <h2 className="text-base font-semibold text-slate-900">Recent Visitors</h2>
@@ -213,8 +253,10 @@ function Dashboard() {
           </table>
         </div>
       </div>
+      )}
 
       {/* Recent Entry Logs */}
+      {(isAdmin || isReports || isSecurity) && (
       <div className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-4">
           <h2 className="text-base font-semibold text-slate-900">Recent Entry Logs</h2>
@@ -278,6 +320,7 @@ function Dashboard() {
           </table>
         </div>
       </div>
+      )}
     </DashboardLayout>
   );
 }

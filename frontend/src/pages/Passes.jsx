@@ -3,6 +3,8 @@ import { useState,useEffect } from "react";
 import API from "../services/api";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Passes() {
 const [passes,setPasses]=useState([]);
@@ -21,26 +23,41 @@ const [expiryDate,setExpiryDate]=useState("");
 const [search,setSearch]=useState("");
 const [loading, setLoading] = useState(true);
 
+const { role } = useContext(AuthContext);
+
+const isAdmin = role === "admin";
+const isReceptionist = role === "receptionist";
+const isReports = role === "reports";
+const isSecurity = role === "security";
+
 useEffect(()=>{
 fetchData();
 },[]);
 
 const fetchData=async()=>{
-try{
-const passRes=await API.get("/passes");
-const visitorRes=await API.get("/visitors");
-const workerRes=await API.get("/workers");
+  try{
+    const passRes=await API.get("/passes");
+    console.log("passes", passRes.data);
+    let visitorRes = { data: [] };
+    let workerRes = { data: [] };
 
-  setPasses(passRes.data);
-  setVisitors(visitorRes.data);
-  setWorkers(workerRes.data);
-}
-catch(error){
-  console.log(error);
-}
-finally{
-  setLoading(false);
-}
+    if (isAdmin || isReceptionist) {
+      visitorRes = await API.get("/visitors");
+      workerRes = await API.get("/workers");
+      console.log("visitors", visitorRes.data);
+      console.log("workers", workerRes.data);
+    }
+
+    setPasses(passRes.data);
+    setVisitors(visitorRes.data);
+    setWorkers(workerRes.data);
+  }
+  catch(error){
+    console.log(error);
+  }
+  finally{
+    setLoading(false);
+  }
 };
 if (loading) {
   return (
@@ -175,15 +192,17 @@ return (
   title="Pass Management"
   description="Create, renew and manage visitor and worker passes"
   actions={
-    <button
-      onClick={()=>setShowForm(!showForm)}
-      className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-sm"
-    >
-      {showForm ? "Close Form" : "Add Pass"}
-    </button>
+    (isAdmin || isReceptionist) && (
+      <button
+        onClick={()=>setShowForm(!showForm)}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-sm"
+      >
+        {showForm ? "Close Form" : "Add Pass"}
+      </button>
+    )
   }
 >
-    {showForm && (
+    {(isAdmin || isReceptionist) && showForm && (
       <div className="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-6 sm:p-8 mb-12">
         <h2 className="text-2xl font-bold text-slate-800 mb-2">
           Create New Pass
@@ -447,24 +466,28 @@ return (
                         >
                           History
                         </button>
+                        {(isAdmin || isReceptionist) && (
                         <button
                           onClick={()=>handleRenew(pass._id)}
                           className="bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
                         >
                           Renew
                         </button>
+                        )}
                         <button
                           onClick={() => setSelectedPass(pass)}
                           className="bg-green-600 hover:bg-green-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold"
                         >
                           PDF
                         </button>
+                        {isAdmin && (
                         <button
                           onClick={()=>handleDelete(pass._id)}
                           className="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
                         >
                           Delete
                         </button>
+                        )}
                       </div>
                     </td>
                   </tr>

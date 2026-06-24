@@ -1,6 +1,8 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useState, useEffect } from "react";
 import API from "../services/api";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import {
   Users,
   UserPlus,
@@ -19,6 +21,11 @@ function Visitors() {
   const [editingId, setEditingId] = useState(null);
   const [search,setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  
+  const { role } = useContext(AuthContext);
+  const isAdmin = role === "admin";
+  const isReceptionist = role === "receptionist";
+  const isReports = role === "reports";
 
   const filteredVisitors = visitors.filter(
     (visitor) =>
@@ -150,7 +157,7 @@ function Visitors() {
             onChange={(e) => setSearch(e.target.value)}
             className="w-full md:w-80 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-
+          {(isAdmin || isReceptionist) && (
           <button
             onClick={() => {
               setShowForm(true);
@@ -164,11 +171,12 @@ function Visitors() {
             <UserPlus size={18} />
             Add Visitor
           </button>
+          )}
         </div>
 
         {/* Form */}
 
-        {showForm && (
+        {(isAdmin || isReceptionist) && showForm && (
           <div className="bg-slate-50 rounded-xl p-5 mb-6 border">
             <h3 className="text-lg font-semibold mb-4">
               {editingId
@@ -284,24 +292,32 @@ function Visitors() {
                     <td className="p-3">
                       {visitor.purpose}
                     </td>
+                    <td>
+                      {isReports ? (
+                        <span className="text-slate-400 text-sm">
+                          Read Only
+                        </span>
+                      ) : (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(visitor)}
+                            className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-lg flex items-center gap-1"
+                          >
+                            <Pencil size={14} />
+                            Edit
+                          </button>
 
-                    <td className="p-3 flex gap-2">
-
-                      <button
-                          onClick={() => handleEdit(visitor)}
-                          className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-lg flex items-center gap-1"
-                      >
-                        <Pencil size={14} />
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={() => handleDelete(visitor._id)}
-                        className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg flex items-center gap-1"
-                      >
-                        <Trash2 size={14} />
-                        Delete
-                      </button>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDelete(visitor._id)}
+                              className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg flex items-center gap-1"
+                            >
+                              <Trash2 size={14} />
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

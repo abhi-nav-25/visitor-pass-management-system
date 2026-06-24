@@ -87,7 +87,7 @@ function Reports() {
         API.get("/visitors"),
         API.get("/workers"),
         API.get("/passes"),
-        API.get("/logs/inside"),
+        API.get("/logs"),
       ]);
 
       const passes = passesRes.data;
@@ -97,7 +97,9 @@ function Reports() {
         passes: passes.length,
         active: passes.filter((p) => p.status === "active").length,
         expired: passes.filter((p) => p.status === "expired").length,
-        inside: logsRes.data.length,
+        inside: logsRes.data.logs.filter(
+          (log) => log.status === "inside"
+        ).length,
       });
     } catch (error) {
       console.log(error);

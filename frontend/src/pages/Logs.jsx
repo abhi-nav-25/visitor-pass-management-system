@@ -2,27 +2,32 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { useState,useEffect } from "react";
 import API from "../services/api";
 import { ScrollText, LogIn, LogOut, FileSearch } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Logs() {
   const [logs,setLogs]=useState([]);
   const [search,setSearch]=useState("");
   const [statusFilter,setStatusFilter]=useState("all");
   const [loading,setLoading]=useState(true);
+  const { role } = useContext(AuthContext);
+  const isSecurity = role === "security";
 
   useEffect(()=>{
     fetchLogs();
   },[]);
 
-  const fetchLogs=async()=>{
-    try{
-      const response=await API.get("/logs");
+  const fetchLogs = async () => {
+    try {
+      const response = isSecurity
+        ? await API.get("/logs/inside")
+        : await API.get("/logs");
+      console.log(response.data);
       setLogs(response.data.logs);
-    }
-    catch(error){
+    } catch (error) {
       console.log(error);
-    }
-    finally{
-     setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,10 +49,16 @@ function Logs() {
 
   return (
     <DashboardLayout
-      title="Entry & Exit Logs"
-      description="Monitor visitor and worker movement across the facility"
+      title={isSecurity ? "Currently Inside" : "Entry & Exit Logs"}
+      description={isSecurity ? "People currently inside the facility" : "Monitor visitor and worker movement across the facility"}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div
+        className={`grid gap-6 mb-8 ${
+          isSecurity
+            ? "grid-cols-1 md:grid-cols-2"
+            : "grid-cols-1 md:grid-cols-3"
+        }`}
+      >
         <div className="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200 flex items-center justify-between">
           <div>
             <p className="text-slate-500 text-sm">
@@ -74,6 +85,7 @@ function Logs() {
             <LogIn className="h-6 w-6 text-green-600" />
           </div>
         </div>
+        {!isSecurity && (
         <div className="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200 flex items-center justify-between">
           <div>
             <p className="text-slate-500 text-sm">
@@ -87,6 +99,7 @@ function Logs() {
             <LogOut className="h-6 w-6 text-slate-600" />
           </div>
         </div>
+        )}
       </div>
       <div className="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
@@ -97,6 +110,7 @@ function Logs() {
             onChange={(e)=>setSearch(e.target.value)}
             className="w-full md:w-80 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {!isSecurity && (
           <select
             value={statusFilter}
             onChange={(e)=>setStatusFilter(e.target.value)}
@@ -106,6 +120,7 @@ function Logs() {
             <option value="inside">Inside</option>
             <option value="outside">Outside</option>
           </select>
+          )}
         </div>
         {loading ? (
                 <div className="py-12 text-center text-slate-500">
@@ -131,7 +146,9 @@ function Logs() {
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Holder</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Pass Type</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Entry Time</th>
+                  {!isSecurity && (
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Exit Time</th>
+                  )}
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
                 </tr>
               </thead>
@@ -155,11 +172,13 @@ function Logs() {
                 <td className="p-3">
                   {new Date(log.entryTime).toLocaleString("en-IN")}
                 </td>
+                {!isSecurity && (
                 <td className="p-3">
                   {log.exitTime
                     ? new Date(log.exitTime).toLocaleString("en-IN")
                     : "-"}
                 </td> 
+                )}
                 <td className="p-3">
                   <span
                     className={

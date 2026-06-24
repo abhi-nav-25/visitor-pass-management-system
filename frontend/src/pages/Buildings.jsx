@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import API from "../services/api";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import {
   Building2,
   Search,
@@ -16,7 +18,8 @@ function Buildings() {
   const [editingId, setEditingId] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const { role } = useContext(AuthContext);
+  const isAdmin = role === "admin";
   const [formData, setFormData] = useState({
     name: "",
     code: "",
@@ -161,7 +164,7 @@ function Buildings() {
             className="w-full md:w-80 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          <button
+          {isAdmin && ( <button
             onClick={() => {
               setShowForm(true);
               setEditingId(null);
@@ -175,12 +178,12 @@ function Buildings() {
           >
             <PlusCircle size={18} />
             Add Building
-          </button>
+          </button>)}
         </div>
 
         {/* Form */}
 
-        {showForm && (
+        {isAdmin && showForm && (
           <div className="bg-slate-50 rounded-xl p-5 mb-6 border">
             <h3 className="text-lg font-semibold mb-4">
               {editingId ? "Edit Building" : "Add Building"}
@@ -319,7 +322,9 @@ function Buildings() {
                       </span>
                     </td>
 
-                    <td className="p-3 flex gap-2">
+                    <td className="p-3">
+                      {isAdmin ? (
+                        <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(building)}
                         className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1 rounded-lg flex items-center gap-1"
@@ -327,7 +332,7 @@ function Buildings() {
                         <Pencil size={14} />
                         Edit
                       </button>
-
+                      
                       <button
                         onClick={() => handleDelete(building._id)}
                         className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg flex items-center gap-1"
@@ -335,6 +340,12 @@ function Buildings() {
                         <Trash2 size={14} />
                         Delete
                       </button>
+                      </div>
+                      ):(
+                        <span className="text-slate-400 text-sm">
+                          Read Only
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}

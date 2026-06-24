@@ -20,7 +20,14 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={[
+              "admin",
+              "receptionist",
+              "security",
+              "reports",
+            ]}
+          >
             <Dashboard />
           </ProtectedRoutes>
         }
@@ -31,7 +38,8 @@ function App() {
           <ProtectedRoutes
             roles={[
               "admin",
-              "receptionist"
+              "receptionist",
+              "reports",
             ]}
           >
             <Visitors />
@@ -44,7 +52,8 @@ function App() {
           <ProtectedRoutes
             roles={[
               "admin",
-              "receptionist"
+              "receptionist",
+              "reports",
             ]}
           >
             <Workers />
@@ -57,7 +66,9 @@ function App() {
           <ProtectedRoutes
             roles={[
               "admin",
-              "receptionist"
+              "receptionist",
+              "security",
+              "reports",
             ]}
           >
             <Passes />
@@ -70,7 +81,8 @@ function App() {
           <ProtectedRoutes
             roles={[
               "admin",
-              "security"
+              "security",
+              "reports",
             ]}
           >
             <Logs />
@@ -81,7 +93,10 @@ function App() {
         path="/reports"
         element={
           <ProtectedRoutes
-            roles={["admin"]}
+            roles={[
+              "admin",
+              "reports",
+            ]}
           >
             <Reports />
           </ProtectedRoutes>
@@ -91,7 +106,12 @@ function App() {
         path="/gates"
         element={
           <ProtectedRoutes
-            roles={["admin"]}
+            roles={[
+              "admin",
+              "receptionist",
+              "security",
+              "reports",
+            ]}
           >
               <Gates />
           </ProtectedRoutes>
@@ -101,7 +121,12 @@ function App() {
         path="/areas"
         element={
           <ProtectedRoutes
-            roles={["admin"]}
+            roles={[
+              "admin",
+              "receptionist",
+              "security",
+              "reports",
+            ]}
           >
             <Areas />
           </ProtectedRoutes>
@@ -112,7 +137,12 @@ function App() {
         path="/buildings"
         element={
           <ProtectedRoutes
-            roles={["admin"]}
+            roles={[
+              "admin",
+              "receptionist",
+              "security",
+              "reports",
+            ]}
           >
             <Buildings />
           </ProtectedRoutes>
@@ -123,7 +153,12 @@ function App() {
         path="/departments"
         element={
           <ProtectedRoutes
-            roles={["admin"]}
+            roles={[
+              "admin",
+              "receptionist",
+              "security",
+              "reports",
+            ]}
           >
             <Departments />
           </ProtectedRoutes>
