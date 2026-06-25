@@ -1,12 +1,27 @@
 const Visitor=require("../models/visitor");
 
-const getVisitors=async(req,res) => {
+const getVisitors = async (req, res) => {
     try {
-        const visitors = await Visitor.find();
+        const { search } = req.query;
+
+        let filter = {};
+
+        if (search) {
+            filter = {
+                $or: [
+                    { name: { $regex: search, $options: "i" } },
+                    { mobile: { $regex: search, $options: "i" } },
+                    { idProofNumber: { $regex: search, $options: "i" } }
+                ]
+            };
+        }
+
+        const visitors = await Visitor.find(filter);
+
         res.status(200).json(visitors);
     } catch (error) {
         res.status(500).json({
-            message: error.message
+            message: error.message,
         });
     }
 };
@@ -62,33 +77,7 @@ const deleteVisitor=async(req,res)=>{
     }
 };
 
-const searchVisitors = async (req, res) => {
-    try {
-        const { name, mobile, idProofNumber } = req.query;
-        let filter = {};
-        if (name) {
-            filter.name = {
-              $regex: name,
-                $options: "i"
-            };
-        }
-        if (mobile) {
-            filter.mobile = mobile;
-        }
-        if (idProofNumber) {
-            filter.idProofNumber = {
-                $regex: idProofNumber,
-                $options: "i",
-            };
-        }
-        const visitors = await Visitor.find(filter);
-        res.status(200).json(visitors);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
+
 
 module.exports={
     getVisitors,
@@ -96,5 +85,4 @@ module.exports={
     getVisitorById,
     updateVisitor,
     deleteVisitor,
-    searchVisitors
 };

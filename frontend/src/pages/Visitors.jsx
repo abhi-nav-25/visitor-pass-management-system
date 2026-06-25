@@ -36,7 +36,10 @@ function Visitors() {
         .toLowerCase()
         .includes(search.toLowerCase()) ||
       (visitor.mobile || "")
-        .includes(search)
+        .includes(search) ||
+      (visitor.idProofNumber || "")
+        .toLowerCase()
+        .includes(search.toLowerCase())
   );
 
   useEffect(() => {
@@ -167,7 +170,7 @@ function Visitors() {
         <div className="flex flex-col md:flex-row gap-4 justify-between mb-6">
           <input
             type="text"
-            placeholder="Search by name or mobile..."
+            placeholder="Search by name, mobile or ID proof..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full md:w-80 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"

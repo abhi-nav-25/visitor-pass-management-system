@@ -38,8 +38,19 @@ function Workers() {
       (worker.name || "")
         .toLowerCase()
         .includes(search.toLowerCase()) ||
-      (worker.mobile || "").includes(search) ||
+
+      (worker.mobile || "")
+        .includes(search) ||
+
       (worker.department || "")
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+
+      (worker.designation || "")
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+
+      (worker.idProofNumber || "")
         .toLowerCase()
         .includes(search.toLowerCase())
   );
@@ -181,8 +192,7 @@ function Workers() {
         <div className="flex flex-col md:flex-row gap-4 justify-between mb-6">
           <input
             type="text"
-            placeholder="Search by name, mobile or department..."
-            value={search}
+            placeholder="Search by name, mobile, department..." value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full md:w-80 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -426,8 +436,8 @@ function Workers() {
                     <td className="p-3">
                       <span
                         className={`text-sm ${isExpired(worker.expiryDate)
-                            ? "text-red-600 font-medium"
-                            : "text-slate-500"
+                          ? "text-red-600 font-medium"
+                          : "text-slate-500"
                           }`}
                       >
                         {worker.expiryDate

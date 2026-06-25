@@ -6,6 +6,7 @@ const visitorSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      index:true,
     },
 
     address: {
