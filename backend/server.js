@@ -13,15 +13,7 @@ const connectDB = require("./config/db");
 
 connectDB();
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://visitor-pass-management-system-pi.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(helmet());
 app.use(express.json());
