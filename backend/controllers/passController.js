@@ -3,57 +3,70 @@ const QRCode = require("qrcode");
 const RenewalHistory = require("../models/renewalHistory");
 
 const createPass = async (req, res) => {
-    try{
+    try {
         const { passType, visitor, worker } = req.body;
-        if(passType === "visitor"){
-            if(!visitor){
-                return res.status(400).json({message: "Visitor ID is required"});
+        if (passType === "visitor") {
+            if (!visitor) {
+                return res.status(400).json({ message: "Visitor ID is required" });
             }
         }
-        else if(passType === "worker"){
-            if(!worker){
-                return res.status(400).json({message: "Worker ID is required"});
+        else if (passType === "worker") {
+            if (!worker) {
+                return res.status(400).json({ message: "Worker ID is required" });
             }
         }
-        else{
-            return res.status(400).json({message: "Invalid pass type"});
+        else {
+            return res.status(400).json({ message: "Invalid pass type" });
         }
-        const pass=await Pass.create(req.body);
+        const pass = await Pass.create(req.body);
         const qrData = JSON.stringify({
             passId: pass._id,
             passType: pass.passType
         });
         const qrCode = await QRCode.toDataURL(qrData);
-        pass.qrCode=qrCode;
+        pass.qrCode = qrCode;
         await pass.save();
 
         res.status(201).json(pass);
-    } catch(error){
+    } catch (error) {
         res.status(500).json({
             message: error.message
         });
     }
 };
 
-const getPasses=async(req,res)=>{
-    try{
-        const passes=await Pass.find().populate("visitor").populate("worker");
+const getPasses = async (req, res) => {
+    try {
+        const passes = await Pass.find()
+            .populate("visitor")
+            .populate("worker");
+
+        for (const pass of passes) {
+            if (
+                pass.status === "active" &&
+                new Date(pass.expiryDate) < new Date()
+            ) {
+                pass.status = "expired";
+                await pass.save();
+            }
+        }
+
         res.status(200).json(passes);
-    } catch(error){
+    } catch (error) {
         res.status(500).json({
             message: error.message
         });
     }
 };
 
-const getPassById=async(req,res)=>{
-    try{
-        const pass=await Pass.findById(req.params.id).populate("visitor").populate("worker");
-        if(!pass){
-            return res.status(404).json({message: "Pass not found"});
+const getPassById = async (req, res) => {
+    try {
+        const pass = await Pass.findById(req.params.id).populate("visitor").populate("worker");
+        if (!pass) {
+            return res.status(404).json({ message: "Pass not found" });
         }
         res.status(200).json(pass);
-    } catch(error){
+    } catch (error) {
         res.status(500).json({
             message: error.message
         });
@@ -65,14 +78,14 @@ const updatePass = async (req, res) => {
         const pass = await Pass.findByIdAndUpdate(
             req.params.id,
             req.body,
-            {new : true}
+            { new: true }
         );
         if (!pass) {
-            return res.status(404).json({message: "Pass not found"});
+            return res.status(404).json({ message: "Pass not found" });
         }
         res.status(200).json(pass);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -99,29 +112,29 @@ const deletePass = async (req, res) => {
 const verifyPass = async (req, res) => {
     try {
         const pass = await Pass.findById(req.params.id).populate("visitor").populate("worker");
-        if(!pass){
-            return res.status(404).json({ message:"Entry Denied. Pass not found"})
+        if (!pass) {
+            return res.status(404).json({ message: "Entry Denied. Pass not found" })
         }
-        if(pass.status==="active")
-                return res.status(200).json({message:"Welcome!", pass })
+        if (pass.status === "active")
+            return res.status(200).json({ message: "Welcome!", pass })
         else
-            return res.status(403).json({ message:"Entry Denied. Pass is not active"})
-    } catch(error) {
+            return res.status(403).json({ message: "Entry Denied. Pass is not active" })
+    } catch (error) {
         return res.status(500).json({
             message: error.message
         })
     }
 };
 
-const getPassQR = async(req,res)=>{
-    try{
+const getPassQR = async (req, res) => {
+    try {
         const pass = await Pass.findById(req.params.id);
-        if(!pass){
-            return res.status(404).json({message: "Pass not found"});
+        if (!pass) {
+            return res.status(404).json({ message: "Pass not found" });
         }
-        res.status(200).json({qrCode: pass.qrCode});
-    }catch(error){
-        res.status(500).json({message: error.message});
+        res.status(200).json({ qrCode: pass.qrCode });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -133,20 +146,20 @@ const verifyQRCode = async (req, res) => {
             .populate("visitor")
             .populate("worker");
         if (!pass) {
-            return res.status(404).json({message: "Entry Denied. Pass not found"});
+            return res.status(404).json({ message: "Entry Denied. Pass not found" });
         }
-        if(data.passType !== pass.passType){
-            return res.status(403).json({message: "Invalid QR code"});
+        if (data.passType !== pass.passType) {
+            return res.status(403).json({ message: "Invalid QR code" });
         }
         if (pass.status !== "active") {
-            return res.status(403).json({message: "Entry Denied. Pass is not active"});
+            return res.status(403).json({ message: "Entry Denied. Pass is not active" });
         }
         if (new Date(pass.expiryDate) < new Date()) {
-            return res.status(403).json({message: "Entry Denied. Pass expired"});
+            return res.status(403).json({ message: "Entry Denied. Pass expired" });
         }
-        res.status(200).json({message: "Welcome!",pass});
+        res.status(200).json({ message: "Welcome!", pass });
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -173,7 +186,7 @@ const searchPasses = async (req, res) => {
 
 const getActivePasses = async (req, res) => {
     try {
-        const passes = await Pass.find({status: "active"})
+        const passes = await Pass.find({ status: "active" })
             .populate("visitor")
             .populate("worker");
         res.status(200).json(passes);
@@ -186,7 +199,7 @@ const getActivePasses = async (req, res) => {
 
 const getExpiredPasses = async (req, res) => {
     try {
-        const passes = await Pass.find({expiryDate: { $lt: new Date() }})
+        const passes = await Pass.find({ expiryDate: { $lt: new Date() } })
             .populate("visitor")
             .populate("worker");
         res.status(200).json(passes);
@@ -213,6 +226,7 @@ const renewPass = async (req, res) => {
             });
         }
         pass.expiryDate = newExpiryDate;
+        pass.status = "active";
         await pass.save();
         await RenewalHistory.create({
             pass: pass._id,
@@ -233,8 +247,8 @@ const getRenewalHistory = async (req, res) => {
         const history = await RenewalHistory.find({
             pass: req.params.id
         })
-        .populate("renewedBy", "name email role")
-        .sort({ renewedAt: -1 });
+            .populate("renewedBy", "name email role")
+            .sort({ renewedAt: -1 });
         res.status(200).json(history);
     } catch (error) {
         res.status(500).json({
