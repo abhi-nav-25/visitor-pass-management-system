@@ -1,4 +1,4 @@
-const Worker = require("../models/Worker");
+const Worker = require("../models/worker");
 
 const createWorker = async (req, res) => {
     try {

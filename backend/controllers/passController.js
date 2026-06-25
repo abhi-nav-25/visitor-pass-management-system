@@ -1,6 +1,6 @@
-const Pass = require("../models/Pass");
+const Pass = require("../models/pass");
 const QRCode = require("qrcode");
-const RenewalHistory = require("../models/RenewalHistory");
+const RenewalHistory = require("../models/renewalHistory");
 
 const createPass = async (req, res) => {
     try{

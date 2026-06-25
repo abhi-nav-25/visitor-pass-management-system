@@ -1,5 +1,5 @@
-const EntryExitLog = require("../models/EntryExitLog");
-const Pass = require("../models/Pass");
+const EntryExitLog = require("../models/entryExitLog");
+const Pass = require("../models/pass");
 
 const entryPerson = async (req, res) => {
     try {

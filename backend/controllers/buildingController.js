@@ -1,4 +1,4 @@
-const Building = require("../models/Building");
+const Building = require("../models/building");
 
 const createBuilding = async (req, res) => {
   try {

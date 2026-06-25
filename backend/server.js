@@ -37,6 +37,12 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Too many login attempts. Please try again later.",
+});
+
 const logger = require("./middleware/logger");
 app.use(logger);
 
@@ -53,7 +59,7 @@ const entryExitRoutes = require("./routes/entryExitRoutes");
 app.use("/api/logs", entryExitRoutes);
 
 const authRoutes = require("./routes/authRoutes");
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 
 const gateRoutes = require("./routes/gateRoutes");
 app.use("/api/gates", gateRoutes);

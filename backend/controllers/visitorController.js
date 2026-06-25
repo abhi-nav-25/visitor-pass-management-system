@@ -1,4 +1,4 @@
-const Visitor=require("../models/Visitor");
+const Visitor=require("../models/visitor");
 
 const getVisitors=async(req,res) => {
     try {
