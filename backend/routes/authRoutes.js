@@ -4,13 +4,16 @@ const { body } = require("express-validator");
 const validateRequest = require("../middleware/validateRequest");
 const {
     registerUser,
-    loginUser
+    loginUser,
+    getUsers,
+    deleteUser
 } = require("../controllers/authController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
 router.post(
   "/register",
-
+  protect,
+  authorize("admin"),
   body("name")
     .trim()
     .notEmpty()
@@ -55,6 +58,20 @@ router.get("/profile", protect, (req,res)=>{
 router.get("/admin",protect,authorize("admin"),(req,res)=>{
         res.status(200).json({message: "Welcome Admin"});
     }
+);
+
+router.get(
+  "/users",
+  protect,
+  authorize("admin"),
+  getUsers
+);
+
+router.delete(
+  "/users/:id",
+  protect,
+  authorize("admin"),
+  deleteUser
 );
 
 module.exports = router;

@@ -1,15 +1,9 @@
-import { Menu, Search, Bell } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 
-/**
- * Navbar
- * Global chrome shown above every page's content. Handles only things that
- * apply system-wide (mobile menu toggle, global search, notifications,
- * current user) — page-specific titles/actions live in DashboardLayout's
- * page header instead, so this bar never duplicates that content.
- *
- * @param {() => void} onMenuClick - Opens the mobile sidebar drawer
- */
+
 function Navbar({ onMenuClick }) {
+  const name = localStorage.getItem("name");
+  const role = localStorage.getItem("role");  
   return (
     <header className="sticky top-0 z-30 flex h-16 flex-shrink-0 items-center gap-4 border-b border-slate-200 bg-white px-4 shadow-sm sm:px-6 lg:px-8">
       {/* Mobile menu trigger */}
@@ -36,26 +30,16 @@ function Navbar({ onMenuClick }) {
       <div className="flex-1 sm:hidden" />
 
       <div className="flex items-center gap-2 sm:gap-4">
-        {/* Notifications */}
-        <button
-          type="button"
-          className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-          aria-label="Notifications"
-        >
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
-        </button>
-
         <div className="h-8 w-px bg-slate-200" />
 
         {/* Current user */}
         <button type="button" className="flex items-center gap-3 rounded-lg p-1 hover:bg-slate-50">
           <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
-            A
+            {name?.charAt(0).toUpperCase()}
           </span>
           <span className="hidden text-left sm:block">
-            <p className="text-sm font-medium leading-tight text-slate-800">Admin</p>
-            <p className="text-xs leading-tight text-slate-500">System User</p>
+            <p className="text-sm font-medium leading-tight text-slate-800">{name}</p>
+            <p className="text-xs leading-tight text-slate-500">{role}</p>
           </span>
         </button>
       </div>

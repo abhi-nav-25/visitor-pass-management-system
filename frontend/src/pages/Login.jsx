@@ -143,7 +143,7 @@ function Login() {
         </div>
 
         <p className="text-center text-xs text-slate-400 mt-6">
-          Visitor Pass Management System · Admin Access
+          Visitor Pass Management System
         </p>
       </div>
     </div>

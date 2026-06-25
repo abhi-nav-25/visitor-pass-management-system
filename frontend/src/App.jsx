@@ -12,6 +12,7 @@ import Gates from "./pages/Gates";
 import Areas from "./pages/Areas";
 import Buildings from "./pages/Buildings";
 import Departments from "./pages/Departments";
+import Users from "./pages/Users";
 
 function App() {
   return (
@@ -113,7 +114,7 @@ function App() {
               "reports",
             ]}
           >
-              <Gates />
+            <Gates />
           </ProtectedRoutes>
         }
       />
@@ -164,7 +165,14 @@ function App() {
           </ProtectedRoutes>
         }
       />
-
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoutes>
+            <Users />
+          </ProtectedRoutes>
+        }
+      />
     </Routes>
   );
 }

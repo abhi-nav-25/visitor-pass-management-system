@@ -15,7 +15,8 @@ import {
   DoorOpen,
   MapPinned,
   Building2,
-  Building
+  Building,
+
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -28,7 +29,8 @@ const NAV_ITEMS = [
   { to: "/gates", label: "Gates", icon: DoorOpen },
   { to: "/areas", label: "Areas", icon: MapPinned },
   { to: "/buildings", label: "Buildings", icon: Building2 },
-  { to: "/departments", label: "Departments", icon: Building }
+  { to: "/departments", label: "Departments", icon: Building },
+  { to: "/users", label: "Users", icon: Users },
 ];
 
 const ROLE_NAV = {
@@ -43,6 +45,7 @@ const ROLE_NAV = {
     "/areas",
     "/buildings",
     "/departments",
+    "/users",
   ],
 
   receptionist: [
@@ -86,16 +89,15 @@ function Sidebar({ isOpen, onClose }) {
     role,
     name
   } = useContext(AuthContext);
-  const navigate=useNavigate();
-  const handleLogout=()=>{
+  const navigate = useNavigate();
+  const handleLogout = () => {
     logout();
     navigate("/");
   };
   const linkClass = ({ isActive }) =>
-    `group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
-      isActive
-        ? "bg-blue-600 text-white shadow-md shadow-blue-900/30"
-        : "text-slate-300 hover:bg-slate-800 hover:text-white"
+    `group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${isActive
+      ? "bg-blue-600 text-white shadow-md shadow-blue-900/30"
+      : "text-slate-300 hover:bg-slate-800 hover:text-white"
     }`;
 
   return (
@@ -132,20 +134,20 @@ function Sidebar({ isOpen, onClose }) {
         {NAV_ITEMS
           .filter(item =>
             ROLE_NAV[role]
-            ?.includes(item.to)
+              ?.includes(item.to)
           ).map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} className={linkClass} onClick={onClose}>
               <Icon className="h-[18px] w-[18px] flex-shrink-0" />
               {label}
             </NavLink>
-        ))}
+          ))}
       </nav>
 
       {/* Footer*/}
       <div className="border-t border-slate-800 px-4 py-4">
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
           <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-slate-700 text-sm font-semibold text-white">
-            A
+            {name?.charAt(0).toUpperCase()}
           </span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-white">{name}</p>
