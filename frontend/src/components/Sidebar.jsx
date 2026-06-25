@@ -16,7 +16,7 @@ import {
   MapPinned,
   Building2,
   Building,
-
+  ScanLine,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -31,6 +31,7 @@ const NAV_ITEMS = [
   { to: "/buildings", label: "Buildings", icon: Building2 },
   { to: "/departments", label: "Departments", icon: Building },
   { to: "/users", label: "Users", icon: Users },
+  { to: "/scanner",label: "QR Scanner",icon: ScanLine },
 ];
 
 const ROLE_NAV = {
@@ -46,6 +47,7 @@ const ROLE_NAV = {
     "/buildings",
     "/departments",
     "/users",
+    "/scanner",
   ],
 
   receptionist: [
@@ -67,6 +69,7 @@ const ROLE_NAV = {
     "/areas",
     "/buildings",
     "/departments",
+    "/scanner",
   ],
 
   reports: [

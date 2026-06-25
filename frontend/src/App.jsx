@@ -13,6 +13,7 @@ import Areas from "./pages/Areas";
 import Buildings from "./pages/Buildings";
 import Departments from "./pages/Departments";
 import Users from "./pages/Users";
+import QRScanner from "./pages/QRScanner";
 
 function App() {
   return (
@@ -168,8 +169,24 @@ function App() {
       <Route
         path="/users"
         element={
-          <ProtectedRoutes>
+          <ProtectedRoutes
+            roles={[
+              "admin",
+            ]}>
             <Users />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="/scanner"
+        element={
+          <ProtectedRoutes
+            roles={[
+              "admin",
+              "security"
+            ]}
+          >
+            <QRScanner />
           </ProtectedRoutes>
         }
       />
