@@ -83,6 +83,22 @@ app.use("/api/departments", departmentRoutes);
 
 app.use(errorHandler);
 
+const fs = require("fs");
+
+console.log(
+  "Persons folder exists:",
+  fs.existsSync(
+    path.join(__dirname, "uploads", "persons")
+  )
+);
+
+console.log(
+  "ID folder exists:",
+  fs.existsSync(
+    path.join(__dirname, "uploads", "idproofs")
+  )
+);
+
 app.listen(process.env.PORT || 5000, () => {
     console.log(`Server running on port ${process.env.PORT || 5000}`);
 });
