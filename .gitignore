@@ -2,3 +2,9 @@ frontend/node_modules/
 backend/node_modules/
 
 .env
+
+backend/uploads/persons/*
+backend/uploads/idproofs/*
+
+!backend/uploads/persons/.gitkeep
+!backend/uploads/idproofs/.gitkeep
