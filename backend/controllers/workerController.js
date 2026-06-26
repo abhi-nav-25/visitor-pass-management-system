@@ -1,5 +1,5 @@
 const Worker = require("../models/worker");
-
+console.log("FILES RECEIVED:", req.files);
 const createWorker = async (req, res) => {
     try {
         const worker = await Worker.create({
