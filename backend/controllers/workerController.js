@@ -2,8 +2,20 @@ const Worker = require("../models/worker");
 
 const createWorker = async (req, res) => {
     try {
-        const worker = await Worker.create(req.body);
+        const worker = await Worker.create({
+            ...req.body,
+
+            personPhoto:
+                req.files?.personPhoto?.[0]?.path
+                    ?.replace(/\\/g, "/") || "",
+
+            idProofPhoto:
+                req.files?.idProofPhoto?.[0]?.path
+                    ?.replace(/\\/g, "/") || "",
+        });
+
         res.status(201).json(worker);
+
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -49,17 +61,38 @@ const getWorkerById = async (req, res) => {
 
 const updateWorker = async (req, res) => {
     try {
+        const updateData = {
+            ...req.body,
+        };
+
+        if (req.files?.personPhoto?.[0]) {
+            updateData.personPhoto =
+                req.files.personPhoto[0].path.replace(/\\/g, "/");
+        }
+
+        if (req.files?.idProofPhoto?.[0]) {
+            updateData.idProofPhoto =
+                req.files.idProofPhoto[0].path.replace(/\\/g, "/");
+        }
+
         const worker = await Worker.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            updateData,
             { new: true }
         );
+
         if (!worker) {
-            return res.status(404).json({ message: "Worker not found" });
+            return res.status(404).json({
+                message: "Worker not found",
+            });
         }
+
         res.status(200).json(worker);
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            message: error.message,
+        });
     }
 };
 

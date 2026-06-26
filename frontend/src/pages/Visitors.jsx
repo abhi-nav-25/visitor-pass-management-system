@@ -24,6 +24,9 @@ function Visitors() {
   const [editingId, setEditingId] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [personPhoto, setPersonPhoto] = useState(null);
+  const [idProofPhoto, setIdProofPhoto] = useState(null);
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
 
   const { role } = useContext(AuthContext);
   const isAdmin = role === "admin";
@@ -60,35 +63,76 @@ function Visitors() {
   const handleSubmit = async () => {
     try {
       if (editingId) {
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("address", address);
+        formData.append("mobile", mobile);
+        formData.append("purpose", purpose);
+        formData.append("idProofType", idProofType);
+        formData.append("idProofNumber", idProofNumber);
+
+        if (personPhoto) {
+          formData.append("personPhoto", personPhoto);
+        }
+
+        if (idProofPhoto) {
+          formData.append("idProofPhoto", idProofPhoto);
+        }
+
         const response = await API.put(
           `/visitors/${editingId}`,
+          formData,
           {
-            name,
-            address,
-            mobile,
-            purpose,
-            idProofType,
-            idProofNumber,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
         );
+
         setVisitors(
           visitors.map((visitor) =>
-            visitor._id === editingId ? response.data : visitor)
+            visitor._id === editingId
+              ? response.data
+              : visitor
+          )
         );
+
         setEditingId(null);
       } else {
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("address", address);
+        formData.append("mobile", mobile);
+        formData.append("purpose", purpose);
+        formData.append("idProofType", idProofType);
+        formData.append("idProofNumber", idProofNumber);
+
+        if (personPhoto) {
+          formData.append(
+            "personPhoto",
+            personPhoto
+          );
+        }
+
+        if (idProofPhoto) {
+          formData.append(
+            "idProofPhoto",
+            idProofPhoto
+          );
+        }
+
         const response = await API.post(
           "/visitors",
+          formData,
           {
-            name,
-            address,
-            mobile,
-            purpose,
-            idProofType,
-            idProofNumber,
+            headers: {
+              "Content-Type":
+                "multipart/form-data",
+            },
           }
-        );
-        setVisitors(prev => [...prev, response.data]);
+        ); setVisitors(prev => [...prev, response.data]);
       }
       setName("");
       setMobile("");
@@ -96,6 +140,8 @@ function Visitors() {
       setAddress("");
       setIdProofType("");
       setIdProofNumber("");
+      setPersonPhoto(null);
+      setIdProofPhoto(null);
       setShowForm(false);
     } catch (error) {
       console.log(error);
@@ -180,6 +226,8 @@ function Visitors() {
               onClick={() => {
                 setShowForm(true);
                 setEditingId(null);
+                setPersonPhoto(null);
+                setIdProofPhoto(null);
                 setName("");
                 setMobile("");
                 setPurpose("");
@@ -257,6 +305,51 @@ function Visitors() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm mb-2">
+                Person Photo
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  setPersonPhoto(e.target.files[0])
+                }
+                className="border rounded-xl px-4 py-2 w-full"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm mb-2">
+                ID Proof Photo
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  setIdProofPhoto(e.target.files[0])
+                }
+                className="border rounded-xl px-4 py-2 w-full"
+              />
+            </div>
+            {personPhoto && (
+              <img
+                src={URL.createObjectURL(personPhoto)}
+                alt="person"
+                className="h-20 w-20 rounded-lg object-cover"
+              />
+            )}
+
+            {idProofPhoto && (
+              <img
+                src={URL.createObjectURL(idProofPhoto)}
+                alt="idproof"
+                className="h-20 w-20 rounded-lg object-cover"
+              />
+            )}
+
             <div className="flex gap-3 mt-4">
               <button
                 onClick={handleSubmit}
@@ -271,6 +364,8 @@ function Visitors() {
                 onClick={() => {
                   setShowForm(false);
                   setEditingId(null);
+                  setPersonPhoto(null);
+                  setIdProofPhoto(null);
                   setName("");
                   setMobile("");
                   setPurpose("");
@@ -321,6 +416,8 @@ function Visitors() {
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">ID Number</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Mobile</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Purpose</th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Photo</th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">ID Proof</th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
                 </tr>
               </thead>
@@ -350,6 +447,37 @@ function Visitors() {
                     <td className="p-3">
                       {visitor.purpose}
                     </td>
+
+                    <td className="p-3">
+                      {visitor.personPhoto ? (
+                        <a
+                          href={`${BACKEND_URL}/${visitor.personPhoto}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 underline"
+                        >
+                          View Photo
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+
+                    <td className="p-3">
+                      {visitor.idProofPhoto ? (
+                        <a
+                          href={`${BACKEND_URL}/${visitor.idProofPhoto}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 underline"
+                        >
+                          View ID
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+
                     <td>
                       {isReports ? (
                         <span className="text-slate-400 text-sm">

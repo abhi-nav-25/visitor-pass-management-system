@@ -13,6 +13,11 @@ const connectDB = require("./config/db");
 
 connectDB();
 
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 app.use(
   cors({
     origin: [
@@ -23,7 +28,6 @@ app.use(
   })
 );
 
-app.use(helmet());
 app.use(express.json());
 
 app.use(
@@ -76,9 +80,6 @@ app.use("/api/buildings", buildingRoutes);
 
 const departmentRoutes = require("./routes/departmentRoutes");
 app.use("/api/departments", departmentRoutes);
-
-const uploadRoutes = require("./routes/uploadRoutes");
-app.use("/api/upload", uploadRoutes);
 
 app.use(errorHandler);
 

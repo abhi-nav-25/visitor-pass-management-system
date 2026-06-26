@@ -10,6 +10,7 @@ const {
     deleteVisitor,
 } = require("../controllers/visitorController");
 const { protect, authorize } = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 router.get("/", protect, authorize("admin", "reports", "receptionist"), getVisitors);
 router.post(
@@ -17,6 +18,10 @@ router.post(
     protect,
     authorize("admin", "receptionist"),
 
+    upload.fields([
+        { name: "personPhoto", maxCount: 1 },
+        { name: "idProofPhoto", maxCount: 1 },
+    ]),
     body("name")
         .trim()
         .notEmpty()
@@ -47,7 +52,16 @@ router.post(
 );
 
 router.get("/:id", protect, authorize("admin", "reports", "receptionist"), getVisitorById);
-router.put("/:id", protect, authorize("admin", "receptionist"), updateVisitor);
+router.put(
+    "/:id",
+    protect,
+    authorize("admin", "receptionist"),
+    upload.fields([
+        { name: "personPhoto", maxCount: 1 },
+        { name: "idProofPhoto", maxCount: 1 },
+    ]),
+    updateVisitor
+);
 router.delete("/:id", protect, authorize("admin"), deleteVisitor);
 
 module.exports = router;

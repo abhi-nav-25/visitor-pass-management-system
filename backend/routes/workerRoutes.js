@@ -3,19 +3,25 @@ const router = express.Router();
 const { body } = require("express-validator");
 const validateRequest = require("../middleware/validateRequest");
 const {
-    createWorker,
-    getWorkers,
-    getWorkerById,
-    updateWorker,
-    deleteWorker,
+  createWorker,
+  getWorkers,
+  getWorkerById,
+  updateWorker,
+  deleteWorker,
 } = require("../controllers/workerController");
 const { protect, authorize } = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
-router.get("/",protect,authorize("admin", "reports", "receptionist"),getWorkers);
+router.get("/", protect, authorize("admin", "reports", "receptionist"), getWorkers);
 router.post(
   "/",
   protect,
   authorize("admin", "receptionist"),
+
+  upload.fields([
+    { name: "personPhoto", maxCount: 1 },
+    { name: "idProofPhoto", maxCount: 1 },
+  ]),
 
   body("name")
     .trim()
@@ -55,8 +61,17 @@ router.post(
 
   createWorker
 );
-router.get("/:id",protect,authorize("admin", "reports", "receptionist"),getWorkerById);
-router.put("/:id",protect,authorize("admin", "receptionist"),updateWorker);
-router.delete("/:id",protect,authorize("admin"),deleteWorker);
+router.get("/:id", protect, authorize("admin", "reports", "receptionist"), getWorkerById);
+router.put(
+  "/:id",
+  protect,
+  authorize("admin", "receptionist"),
+  upload.fields([
+    { name: "personPhoto", maxCount: 1 },
+    { name: "idProofPhoto", maxCount: 1 },
+  ]),
+  updateWorker
+);
+router.delete("/:id", protect, authorize("admin"), deleteWorker);
 
-module.exports=router;
+module.exports = router;

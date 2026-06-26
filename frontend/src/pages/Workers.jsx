@@ -24,9 +24,12 @@ function Workers() {
   const [designation, setDesignation] = useState("");
   const [startDate, setStartDate] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [personPhoto, setPersonPhoto] = useState(null);
+  const [idProofPhoto, setIdProofPhoto] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
 
   const { role } = useContext(AuthContext);
   const isAdmin = role === "admin";
@@ -72,41 +75,62 @@ function Workers() {
 
   const handleSubmit = async () => {
     try {
+      const formData = new FormData();
+
+      formData.append("name", name);
+      formData.append("mobile", mobile);
+      formData.append("department", department);
+      formData.append("designation", designation);
+      formData.append("address", address);
+      formData.append("idProofType", idProofType);
+      formData.append("idProofNumber", idProofNumber);
+      formData.append("startDate", startDate);
+      formData.append("expiryDate", expiryDate);
+
+      if (personPhoto) {
+        formData.append("personPhoto", personPhoto);
+      }
+
+      if (idProofPhoto) {
+        formData.append("idProofPhoto", idProofPhoto);
+      }
+
       if (editingId) {
         const response = await API.put(
           `/workers/${editingId}`,
+          formData,
           {
-            name,
-            mobile,
-            department,
-            designation,
-            address,
-            idProofType,
-            idProofNumber,
-            startDate,
-            expiryDate,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
         );
+
         setWorkers(prev =>
           prev.map(worker =>
-            worker._id === editingId ? response.data : worker
+            worker._id === editingId
+              ? response.data
+              : worker
           )
         );
+
         setEditingId(null);
+
       } else {
-        const response = await API.post("/workers", {
-          name,
-          mobile,
-          department,
-          designation,
-          address,
-          idProofType,
-          idProofNumber,
-          startDate,
-          expiryDate,
-        });
-        setWorkers((prev) => [...prev, response.data]);
+
+        const response = await API.post(
+          "/workers",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        setWorkers(prev => [...prev, response.data]);
       }
+
       setName("");
       setMobile("");
       setDepartment("");
@@ -116,7 +140,10 @@ function Workers() {
       setIdProofNumber("");
       setStartDate("");
       setExpiryDate("");
+      setPersonPhoto(null);
+      setIdProofPhoto(null);
       setShowForm(false);
+
     } catch (error) {
       console.log(error);
     }
@@ -211,6 +238,8 @@ function Workers() {
                 setDesignation("");
                 setStartDate("");
                 setExpiryDate("");
+                setPersonPhoto(null);
+                setIdProofPhoto(null);
               }}
               className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2"
             >
@@ -308,6 +337,31 @@ function Workers() {
                   className="border rounded-xl px-4 py-2 w-full"
                 />
               </div>
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">
+                  Worker Photo
+                </label>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setPersonPhoto(e.target.files[0])}
+                  className="border rounded-xl px-4 py-2 w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">
+                  ID Proof Photo
+                </label>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setIdProofPhoto(e.target.files[0])}
+                  className="border rounded-xl px-4 py-2 w-full"
+                />
+              </div>
             </div>
 
             <div className="flex gap-3 mt-4">
@@ -331,6 +385,8 @@ function Workers() {
                   setDesignation("");
                   setStartDate("");
                   setExpiryDate("");
+                  setPersonPhoto(null);
+                  setIdProofPhoto(null);
                 }}
                 className="bg-slate-200 hover:bg-slate-300 px-5 py-2 rounded-xl"
               >
@@ -394,6 +450,12 @@ function Workers() {
                     Expiry Date
                   </th>
                   <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Photo
+                  </th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    ID Proof
+                  </th>
+                  <th className="text-left p-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                     Actions
                   </th>
                 </tr>
@@ -447,6 +509,36 @@ function Workers() {
                           )
                           : "—"}
                       </span>
+                    </td>
+
+                    <td className="p-3">
+                      {worker.personPhoto ? (
+                        <a
+                          href={`${BACKEND_URL}/${worker.personPhoto}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 underline"
+                        >
+                          View Photo
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+
+                    <td className="p-3">
+                      {worker.idProofPhoto ? (
+                        <a
+                          href={`${BACKEND_URL}/${worker.idProofPhoto}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 underline"
+                        >
+                          View ID
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
                     </td>
 
                     <td className="p-3">
