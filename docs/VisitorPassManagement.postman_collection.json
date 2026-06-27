@@ -1,0 +1,1851 @@
+{
+  "info": {
+    "_postman_id": "c5c99682-62b0-424e-8101-d4154c961fd1",
+    "name": "Visitor Pass Management System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56152192",
+    "_collection_link": "https://go.postman.co/collection/56152192-c5c99682-62b0-424e-8101-d4154c961fd1?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@company.com\",\r\n  \"password\": \"admin123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/login",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"System Admin\",\r\n  \"email\": \"admin@company.com\",\r\n  \"password\": \"admin123\",\r\n  \"role\": \"admin\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/register",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Admin only endpoint.  \nRequires Bearer Token from an authenticated admin user.  \nCreates a new system user (admin, receptionist, security)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Visitors",
+      "item": [
+        {
+          "name": "Get All Visitors",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/visitors",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "visitors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Visitor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Rohit Sharma",
+                  "type": "text",
+                  "uuid": "ce863629-4ba1-48b3-a748-7ebc0445fb36"
+                },
+                {
+                  "key": "mobile",
+                  "value": "9876599001",
+                  "type": "text",
+                  "uuid": "847e6432-bbf0-4a90-bf0d-f8bc0bb9e520"
+                },
+                {
+                  "key": "address",
+                  "value": "Chennai",
+                  "type": "text",
+                  "uuid": "2dfb6057-3ba0-4399-8e63-20ee9369f416"
+                },
+                {
+                  "key": "idProofType",
+                  "value": "Aadhaar",
+                  "type": "text",
+                  "uuid": "fad4d4d1-c2a2-4d06-b0ed-bd377bfc0dac"
+                },
+                {
+                  "key": "idProofNumber",
+                  "value": "200000100000",
+                  "type": "text",
+                  "uuid": "219bb43c-6e53-43c7-b822-6f051e594535"
+                },
+                {
+                  "key": "personPhoto",
+                  "type": "file",
+                  "uuid": "57eb529b-7f99-4108-b464-99fb1df85d82",
+                  "src": ""
+                },
+                {
+                  "key": "idProofPhoto",
+                  "type": "file",
+                  "uuid": "7c4c3a51-65c2-44e7-8b87-4adc639f0e40",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/visitors",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "visitors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Visitor By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/visitors/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "visitors",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Visitor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "3fe999b4-0efe-4ace-9329-f0eb76906e37"
+                },
+                {
+                  "key": "mobile",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "4b8e745b-5e53-40c0-b25b-d5f71b88b3cc"
+                },
+                {
+                  "key": "address",
+                  "value": "Kerala",
+                  "type": "text",
+                  "uuid": "159de406-256a-4f1f-8e0d-d75e790ca181"
+                },
+                {
+                  "key": "idProofType",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "7efefa06-c00b-4b57-b61d-c6f5b9f06a7a"
+                },
+                {
+                  "key": "idProofNumber",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "5f6e9f97-0f99-4c72-a5c2-e8d2103f6fc3"
+                },
+                {
+                  "key": "personPhoto",
+                  "type": "file",
+                  "uuid": "7bdf8558-7920-4e14-b5af-4761d1bfecf0",
+                  "value": null
+                },
+                {
+                  "key": "idProofPhoto",
+                  "type": "file",
+                  "uuid": "d7753ad9-fb46-4b24-8b8f-81c848118de2",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/visitors/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "visitors",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Visitor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/visitors/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "visitors",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "item": [
+        {
+          "name": "Get All Workers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/workers",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "workers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Worker",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "1b33754e-fb0c-49cf-81b3-b16e8363a95e"
+                },
+                {
+                  "key": "mobile",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fe824142-ab0a-4248-a5f4-41be3e661a32"
+                },
+                {
+                  "key": "address",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "94c716d0-ff58-4555-a753-d6355fdc2a33"
+                },
+                {
+                  "key": "department",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "a90fd7d4-3204-40f0-bbcb-e2189c1ed306"
+                },
+                {
+                  "key": "designation",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "b026c2f6-3696-455b-917b-934b0c0981b5"
+                },
+                {
+                  "key": "idProofType",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "adb31213-352c-4f5a-b171-5768e8b44ec5"
+                },
+                {
+                  "key": "idProofNumber",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "e5134f87-8b10-41bc-89cb-015790e987a2"
+                },
+                {
+                  "key": "personPhoto",
+                  "type": "file",
+                  "uuid": "df7c8d26-5e40-495b-bea4-9e4c6ecdb812",
+                  "value": null
+                },
+                {
+                  "key": "idProofPhoto",
+                  "type": "file",
+                  "uuid": "1a38cbde-df7b-4bc0-add2-1352ae2317c5",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/workers",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "workers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Worker By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/workers/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "workers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Worker",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "1b33754e-fb0c-49cf-81b3-b16e8363a95e"
+                },
+                {
+                  "key": "mobile",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fe824142-ab0a-4248-a5f4-41be3e661a32"
+                },
+                {
+                  "key": "address",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "94c716d0-ff58-4555-a753-d6355fdc2a33"
+                },
+                {
+                  "key": "department",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "a90fd7d4-3204-40f0-bbcb-e2189c1ed306"
+                },
+                {
+                  "key": "designation",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "b026c2f6-3696-455b-917b-934b0c0981b5"
+                },
+                {
+                  "key": "idProofType",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "adb31213-352c-4f5a-b171-5768e8b44ec5"
+                },
+                {
+                  "key": "idProofNumber",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "e5134f87-8b10-41bc-89cb-015790e987a2"
+                },
+                {
+                  "key": "personPhoto",
+                  "type": "file",
+                  "uuid": "df7c8d26-5e40-495b-bea4-9e4c6ecdb812",
+                  "value": null
+                },
+                {
+                  "key": "idProofPhoto",
+                  "type": "file",
+                  "uuid": "fce81935-130c-42e1-87ab-e68fcfb22a9b",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/workers/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "workers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Worker",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/workers/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "workers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Passes",
+      "item": [
+        {
+          "name": "Get All Passes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Pass",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"passType\": \"visitor\",\r\n  \"visitor\": \"VISITOR_ID\",\r\n  \"expiryDate\": \"2026-12-31\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/passes",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pass By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Pass",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Pass",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Pass",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/verify/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                "verify",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify QR",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"qrData\": \"QR_DATA_HERE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/passes/verify-qr",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                "verify-qr"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get QR Code",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/:id/qr",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                ":id",
+                "qr"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Renew Pass",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"newExpiryDate\": \"2027-12-31\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/passes/:id/renew",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                ":id",
+                "renew"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Renewal History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/:id/history",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                ":id",
+                "history"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Logs",
+      "item": [
+        {
+          "name": "Get All Logs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/logs",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "logs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Inside Logs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/logs/inside",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "logs",
+                "inside"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Entry Scan",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/logs/entry/:passId",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "logs",
+                "entry",
+                ":passId"
+              ],
+              "variable": [
+                {
+                  "key": "passId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Exit Scan",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/logs/exit/:passId",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "logs",
+                "exit",
+                ":passId"
+              ],
+              "variable": [
+                {
+                  "key": "passId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gates",
+      "item": [
+        {
+          "name": "Get All Gates",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/gates",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Gate",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Main Gate\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/gates",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Gate By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/gates/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gates",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Gate",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Updated Gate\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/gates/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gates",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Gate",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/gates/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gates",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Areas",
+      "item": [
+        {
+          "name": "Get All Areas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/areas",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "areas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Area",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Production Area\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/areas",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "areas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Area By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/areas/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "areas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Area",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Updated Area\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/areas/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "areas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Area",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/areas/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "areas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Buildings",
+      "item": [
+        {
+          "name": "Get All Buildings",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/buildings",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "buildings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Building",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Building A\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/buildings",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "buildings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Building By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/buildings/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "buildings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Building",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Updated Building\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/buildings/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "buildings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Building",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/buildings/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "buildings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "item": [
+        {
+          "name": "Get All Departments",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/departments",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "departments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Department",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"IT Department\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/departments",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "departments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Department By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/departments/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "departments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Updated Department\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/departments/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "departments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/departments/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "departments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000/api"
+    },
+    {
+      "key": "TOKEN",
+      "value": ""
+    }
+  ]
+}
