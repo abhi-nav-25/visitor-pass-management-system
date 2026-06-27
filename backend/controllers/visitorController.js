@@ -27,8 +27,6 @@ const getVisitors = async (req, res) => {
 };
 const createVisitor = async (req, res) => {
     try {
-        console.log("FILES RECEIVED:", req.files);
-
         const visitor = await Visitor.create({
             ...req.body,
 
