@@ -30,6 +30,12 @@ app.use(
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Visitor Pass Management System API is running",
+  });
+});
+
 app.use(
   "/uploads",
   express.static(
