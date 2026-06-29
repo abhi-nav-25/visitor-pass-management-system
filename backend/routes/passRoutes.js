@@ -15,10 +15,17 @@ const {
     getActivePasses,
     getExpiredPasses,
     renewPass,
-    getRenewalHistory
+    getRenewalHistory,
+    exportPasses,
 } = require("../controllers/passController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
+router.get(
+  "/export",
+  protect,
+  authorize("admin", "reports"),
+  exportPasses
+);
 router.get("/",protect,authorize("admin", "reports", "security", "receptionist"),getPasses);
 router.post(
   "/",

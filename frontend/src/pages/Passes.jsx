@@ -177,6 +177,21 @@ function Passes() {
     );
   };
 
+  const exportPasses = async () => {
+    const response = await API.get("/passes/export", {
+      responseType: "blob",
+    });
+
+    const url = window.URL.createObjectURL(
+      new Blob([response.data])
+    );
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "passes.xlsx";
+    link.click();
+  };
+
   const filteredPasses = passes.filter((pass) => {
     const holder =
       pass.passType === "visitor"
@@ -206,6 +221,27 @@ function Passes() {
             {showForm ? "Close Form" : "Add Pass"}
           </button>
         )
+      }
+      actions={
+        <div className="flex gap-2">
+          {(isAdmin || isReceptionist) && (
+            <button
+              onClick={() => setShowForm(!showForm)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-sm"
+            >
+              {showForm ? "Close Form" : "Add Pass"}
+            </button>
+          )}
+
+          {(isAdmin || isReceptionist || isReports) && (
+            <button
+              onClick={exportPasses}
+              className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow-sm"
+            >
+              Export Excel
+            </button>
+          )}
+        </div>
       }
     >
       {(isAdmin || isReceptionist) && showForm && (
@@ -435,18 +471,18 @@ function Passes() {
                       <td className="px-6 py-4">
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${pass.status === "active"
-                              ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
-                              : pass.status === "expired"
-                                ? "bg-red-50 text-red-700 ring-1 ring-red-200"
-                                : "bg-yellow-50 text-yellow-700 ring-1 ring-yellow-200"
+                            ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                            : pass.status === "expired"
+                              ? "bg-red-50 text-red-700 ring-1 ring-red-200"
+                              : "bg-yellow-50 text-yellow-700 ring-1 ring-yellow-200"
                             }`}
                         >
                           <span
                             className={`w-1.5 h-1.5 rounded-full ${pass.status === "active"
-                                ? "bg-emerald-500"
-                                : pass.status === "expired"
-                                  ? "bg-red-500"
-                                  : "bg-yellow-500"
+                              ? "bg-emerald-500"
+                              : pass.status === "expired"
+                                ? "bg-red-500"
+                                : "bg-yellow-500"
                               }`}
                           />
                           {pass.status.charAt(0).toUpperCase() +

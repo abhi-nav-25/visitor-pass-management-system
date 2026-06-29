@@ -4,10 +4,17 @@ const {
     entryPerson,
     exitPerson,
     getAllLogs,
-    getCurrentlyInside
+    getCurrentlyInside,
+    exportLogs,
 } = require("../controllers/entryExitController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
+router.get(
+  "/export",
+  protect,
+  authorize("admin", "reports"),
+  exportLogs
+);
 router.post("/entry/:passId",protect,authorize("admin", "security"),entryPerson);
 router.post("/exit/:passId",protect,authorize("admin", "security"),exitPerson);
 router.get("/",protect,authorize("admin", "reports"),getAllLogs);

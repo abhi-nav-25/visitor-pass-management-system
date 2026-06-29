@@ -1,6 +1,59 @@
+const XLSX = require("xlsx");
 const Pass = require("../models/pass");
 const QRCode = require("qrcode");
 const RenewalHistory = require("../models/renewalHistory");
+
+const exportPasses = async (req, res) => {
+    try {
+        const passes = await Pass.find()
+            .populate("visitor")
+            .populate("worker");
+
+        const data = passes.map((pass) => ({
+            PassNumber: pass._id.toString(),
+            Type: pass.passType,
+            Name:
+                pass.visitor?.name ||
+                pass.worker?.name ||
+                "N/A",
+            Mobile:
+                pass.visitor?.mobile ||
+                pass.worker?.mobile ||
+                "N/A",
+            IssueDate: new Date(pass.issueDate).toLocaleDateString("en-IN"),
+            ExpiryDate: new Date(pass.expiryDate).toLocaleDateString("en-IN"),
+            Status: pass.status,
+        }));
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(data);
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "Passes"
+        );
+
+        const buffer = XLSX.write(workbook, {
+            type: "buffer",
+            bookType: "xlsx",
+        });
+
+        res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=passes.xlsx"
+        );
+
+        res.setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+
+        res.send(buffer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 const createPass = async (req, res) => {
     try {
@@ -270,5 +323,6 @@ module.exports = {
     getActivePasses,
     getExpiredPasses,
     renewPass,
-    getRenewalHistory
+    getRenewalHistory,
+    exportPasses
 };
