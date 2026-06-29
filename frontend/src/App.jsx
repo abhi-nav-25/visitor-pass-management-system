@@ -14,11 +14,19 @@ import Buildings from "./pages/Buildings";
 import Departments from "./pages/Departments";
 import Users from "./pages/Users";
 import QRScanner from "./pages/QRScanner";
+import PublicRoute from "./routes/PublicRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route
+        path="/"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
       <Route
         path="/dashboard"
         element={
