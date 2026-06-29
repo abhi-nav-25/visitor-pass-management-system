@@ -22,116 +22,78 @@ function Dashboard() {
   };
   const [recentVisitors, setRecentVisitors] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
-  
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        if (role === "admin") {
-          const visitors = await API.get("/visitors");
-          const workers = await API.get("/workers");
-          const passes = await API.get("/passes");
-          const logs = await API.get("/logs");
+        const dashboard = await API.get(
+          "/dashboard/stats"
+        );
 
-          setVisitorCount(visitors.data.length);
-          setWorkerCount(workers.data.length);
-          setPassCount(passes.data.length);
-          setLogCount(logs.data.logs.length);
+        const data = dashboard.data;
 
-          setRecentVisitors(visitors.data.slice(-5).reverse());
-          setRecentLogs(logs.data.logs.slice(-5).reverse());
-        }
+        setVisitorCount(data.visitorCount);
+        setWorkerCount(data.workerCount);
+        setPassCount(data.passCount);
+        setLogCount(data.logCount);
 
-        else if (role === "receptionist") {
-          const visitors = await API.get("/visitors");
-          const workers = await API.get("/workers");
-          const passes = await API.get("/passes");
-          setVisitorCount(visitors.data.length);
-          setWorkerCount(workers.data.length);
-          setPassCount(passes.data.length);
-          setRecentVisitors(visitors.data.slice(-5).reverse());
-        }
-
-        else if (role === "reports") {
-          const visitors = await API.get("/visitors");
-          const workers = await API.get("/workers");
-          const passes = await API.get("/passes");
-          const logs = await API.get("/logs");
-
-          setVisitorCount(visitors.data.length);
-          setWorkerCount(workers.data.length);
-          setPassCount(passes.data.length);
-          setLogCount(logs.data.logs.length);
-          setRecentVisitors(
-            visitors.data.slice(-5).reverse()
-          );
-          setRecentLogs(
-            logs.data.logs.slice(-5).reverse()
-          );
-        }
-        else if (role === "security") {
-          const passes = await API.get("/passes");
-          const logs = await API.get("/logs/inside");
-          setPassCount(passes.data.length);
-          setLogCount(logs.data.logs.length);
-          setRecentLogs(
-            logs.data.logs.slice(-5).reverse()
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
+        setRecentVisitors(data.recentVisitors);
+        setRecentLogs(data.recentLogs);
       }
-    };
-    fetchDashboardData();
-  }, []);
-
-  
-  const statusStyles = {
-    inside:"bg-green-100 text-green-700 ring-1 ring-green-200",
-    outside:"bg-slate-100 text-slate-700 ring-1 ring-slate-200"
+     catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+  fetchDashboardData();
+}, []);
 
-  const getStatusBadge = (status) => {
-    const style =
-      statusStyles[String(status).toLowerCase()] ||
-      "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20";
-    return (
-      <span
-        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${style}`}
-      >
-        {status}
-      </span>
-    );
-  };
 
+const statusStyles = {
+  inside: "bg-green-100 text-green-700 ring-1 ring-green-200",
+  outside: "bg-slate-100 text-slate-700 ring-1 ring-slate-200"
+};
+
+const getStatusBadge = (status) => {
+  const style =
+    statusStyles[String(status).toLowerCase()] ||
+    "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20";
   return (
-    <DashboardLayout
-      title="Dashboard"
-      description="Overview of visitors, workers, passes and logs"
-      actions={
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
-        >
-          <LogOut className="h-4 w-4" />
-          Logout
-        </button>
-      }
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${style}`}
     >
-      {/* Summary stat cards */}
-      <div
-        className={`grid gap-5 ${
-        isSecurity
+      {status}
+    </span>
+  );
+};
+
+return (
+  <DashboardLayout
+    title="Dashboard"
+    description="Overview of visitors, workers, passes and logs"
+    actions={
+      <button
+        onClick={handleLogout}
+        className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+      >
+        <LogOut className="h-4 w-4" />
+        Logout
+      </button>
+    }
+  >
+    {/* Summary stat cards */}
+    <div
+      className={`grid gap-5 ${isSecurity
           ? "grid-cols-1 sm:grid-cols-2"
           : isReceptionist
-          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
         }`}
-      >
-        {!isSecurity && (
+    >
+      {!isSecurity && (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Total Visitors</p>
@@ -145,9 +107,9 @@ function Dashboard() {
             <p className="mt-3 text-3xl font-semibold text-slate-900">{visitorCount}</p>
           )}
         </div>
-        )}
+      )}
 
-        {!isSecurity && (
+      {!isSecurity && (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Total Workers</p>
@@ -161,23 +123,23 @@ function Dashboard() {
             <p className="mt-3 text-3xl font-semibold text-slate-900">{workerCount}</p>
           )}
         </div>
-        )}
+      )}
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-500">Total Passes</p>
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
-              <IdCard className="h-5 w-5 text-emerald-600" />
-            </span>
-          </div>
-          {loading ? (
-            <div className="mt-3 h-8 w-16 animate-pulse rounded-md bg-slate-200" />
-          ) : (
-            <p className="mt-3 text-3xl font-semibold text-slate-900">{passCount}</p>
-          )}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-slate-500">Total Passes</p>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
+            <IdCard className="h-5 w-5 text-emerald-600" />
+          </span>
         </div>
+        {loading ? (
+          <div className="mt-3 h-8 w-16 animate-pulse rounded-md bg-slate-200" />
+        ) : (
+          <p className="mt-3 text-3xl font-semibold text-slate-900">{passCount}</p>
+        )}
+      </div>
 
-        {!isReceptionist && (
+      {!isReceptionist && (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-500">Entry Logs</p>
@@ -191,11 +153,11 @@ function Dashboard() {
             <p className="mt-3 text-3xl font-semibold text-slate-900">{logCount}</p>
           )}
         </div>
-        )}
-      </div>
+      )}
+    </div>
 
-      {/* Recent Visitors */}
-      {(isAdmin || isReceptionist || isReports) && (
+    {/* Recent Visitors */}
+    {(isAdmin || isReceptionist || isReports) && (
       <div className="mt-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-4">
           <h2 className="text-base font-semibold text-slate-900">Recent Visitors</h2>
@@ -253,10 +215,10 @@ function Dashboard() {
           </table>
         </div>
       </div>
-      )}
+    )}
 
-      {/* Recent Entry Logs */}
-      {(isAdmin || isReports || isSecurity) && (
+    {/* Recent Entry Logs */}
+    {(isAdmin || isReports || isSecurity) && (
       <div className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-4">
           <h2 className="text-base font-semibold text-slate-900">Recent Entry Logs</h2>
@@ -320,9 +282,9 @@ function Dashboard() {
           </table>
         </div>
       </div>
-      )}
-    </DashboardLayout>
-  );
+    )}
+  </DashboardLayout>
+);
 }
 
 export default Dashboard;

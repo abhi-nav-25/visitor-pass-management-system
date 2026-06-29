@@ -3,8 +3,10 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const errorHandler = require("./middleware/errorHandler");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
+
 app.disable("x-powered-by");
 const path = require("path");
 
@@ -12,7 +14,6 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 
 connectDB();
-
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -86,6 +87,8 @@ app.use("/api/buildings", buildingRoutes);
 
 const departmentRoutes = require("./routes/departmentRoutes");
 app.use("/api/departments", departmentRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 app.use(errorHandler);
 
