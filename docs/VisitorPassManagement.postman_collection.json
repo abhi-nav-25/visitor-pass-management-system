@@ -74,6 +74,125 @@
             "description": "Admin only endpoint.  \nRequires Bearer Token from an authenticated admin user.  \nCreates a new system user (admin, receptionist, security)."
           },
           "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/profile",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Access Test",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/admin",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "admin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/auth/users/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -159,13 +278,13 @@
                   "key": "personPhoto",
                   "type": "file",
                   "uuid": "57eb529b-7f99-4108-b464-99fb1df85d82",
-                  "src": ""
+                  "src": "/C:/Users/COMPUTER/Downloads/ph2.PNG"
                 },
                 {
                   "key": "idProofPhoto",
                   "type": "file",
                   "uuid": "7c4c3a51-65c2-44e7-8b87-4adc639f0e40",
-                  "src": ""
+                  "src": "/C:/Users/COMPUTER/Downloads/p2.PNG"
                 }
               ]
             },
@@ -964,6 +1083,124 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Search Passes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/search?search=rohit",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "rohit"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Passes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/active",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                "active"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expired Passes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/expired",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                "expired"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Export Passes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/passes/export",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "passes",
+                "export"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1090,6 +1327,34 @@
                   "key": "passId",
                   "value": ""
                 }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Export Logs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/logs/export",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "logs",
+                "export"
               ]
             }
           },
@@ -1806,6 +2071,39 @@
                   "key": "id",
                   "value": ""
                 }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/dashboard/stats",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "dashboard",
+                "stats"
               ]
             }
           },
