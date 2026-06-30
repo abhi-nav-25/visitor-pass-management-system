@@ -214,9 +214,10 @@ Dashboard Statistics:
 
 * Total Visitors
 * Total Workers
-* Active Passes
-* Entry Logs
-* Exit Logs
+* Total Passes
+* Total Logs
+* Recent Visitors
+* Recent Activity Logs
 
 Reports:
 
@@ -265,9 +266,8 @@ Backend:
 
 #### Local Network Deployment
 
-* LAN Access Supported
-* Multiple Devices Supported on Same Network
-
+* Accessible from multiple devices on the same network when internet connectivity is available.
+  
 ---
 
 ## 📸 Screenshots
@@ -276,22 +276,22 @@ Backend:
 <img width="1361" height="607" alt="image" src="https://github.com/user-attachments/assets/aba25f38-deb3-4065-94a1-2e20408e2cbc" />
 
 ### Dashboard
-<img width="1345" height="604" alt="image" src="https://github.com/user-attachments/assets/17cb58b3-31ea-485c-bf30-c3480bd5d6f7" />
+<img width="1349" height="607" alt="image" src="https://github.com/user-attachments/assets/c64cbc30-7f5c-4607-b64e-c7c1af3e06d6" />
 
 ### Visitors Module
-<img width="1343" height="604" alt="image" src="https://github.com/user-attachments/assets/6b7dabc1-5e1e-4760-a068-e7389b14e66d" />
+<img width="1348" height="606" alt="image" src="https://github.com/user-attachments/assets/acdfc4d3-d2a4-4a24-857d-55f687974934" />
 
 ### Workers Module
-<img width="1356" height="604" alt="image" src="https://github.com/user-attachments/assets/05f577f2-d9c8-4145-beaa-4c58f48e4d1a" />
+<img width="1350" height="608" alt="image" src="https://github.com/user-attachments/assets/f0cba205-abc4-4e79-8ff7-931e7cd90f28" />
 
 ### Pass Management
-<img width="1349" height="601" alt="image" src="https://github.com/user-attachments/assets/daa2e125-bc38-4845-bc83-07ced4573951" />
+<img width="1347" height="606" alt="image" src="https://github.com/user-attachments/assets/452c9d77-32a7-4fa0-bdc8-918120d9af07" />
 
 ### QR Verification
-<img width="1366" height="606" alt="image" src="https://github.com/user-attachments/assets/918a5ce9-4780-4fd7-bf96-fa1d0c3c3d3a" />
+<img width="1351" height="608" alt="image" src="https://github.com/user-attachments/assets/eea49cf6-3428-44cb-8c5a-f66b0f08c02c" />
 
 ### Reports Module
-<img width="1366" height="602" alt="image" src="https://github.com/user-attachments/assets/5ec710f6-c973-4515-a01c-2463e54d089e" />
+<img width="1349" height="607" alt="image" src="https://github.com/user-attachments/assets/99ca6e4c-a735-40b3-9a0a-f62ce2f014fa" />
 
 ---
 
