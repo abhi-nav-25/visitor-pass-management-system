@@ -5,7 +5,34 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { loginUser } from "../services/authService";
-import { Eye, EyeOff, LogIn, Mail, Lock, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, LogIn, Mail, Lock, AlertCircle, ShieldCheck, UserCog, Headset, FileBarChart } from "lucide-react";
+
+const DEMO_ACCOUNTS = [
+  {
+    role: "Admin",
+    email: "admin@company.com",
+    password: "admin123",
+    icon: UserCog,
+  },
+  {
+    role: "Receptionist",
+    email: "reception@company.com",
+    password: "reception123",
+    icon: Headset,
+  },
+  {
+    role: "Security",
+    email: "security@company.com",
+    password: "security123",
+    icon: ShieldCheck,
+  },
+  {
+    role: "Reports",
+    email: "reports@company.com",
+    password: "reports123",
+    icon: FileBarChart,
+  },
+];
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -36,6 +63,12 @@ function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fillDemoAccount = (demoEmail, demoPassword) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError("");
   };
 
   return (
@@ -143,6 +176,33 @@ function Login() {
               )}
             </button>
           </form>
+
+          <div className="mt-6 pt-6 border-t border-slate-200">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              Demo Credentials
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {DEMO_ACCOUNTS.map(({ role, email: demoEmail, password: demoPassword, icon: Icon }) => (
+                <button
+                  key={role}
+                  type="button"
+                  onClick={() => fillDemoAccount(demoEmail, demoPassword)}
+                  className="flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 px-3 py-2.5 text-left transition"
+                >
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-slate-700">
+                    <Icon className="h-6 w-6 text-blue-600" />
+                    {role}
+                  </span>
+                  <span className="text-[11px] text-slate-500 truncate w-full">
+                    {demoEmail}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="text-[13px] text-slate-400 mt-2.5">
+              Tap a role to autofill its login details.
+            </p>
+          </div>
         </div>
 
         <p className="text-center text-xs text-slate-400 mt-6">
